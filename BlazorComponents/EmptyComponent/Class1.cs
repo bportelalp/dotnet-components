@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dotnet_Components
+namespace EmptyComponent
 {
     public class Class1
     {
