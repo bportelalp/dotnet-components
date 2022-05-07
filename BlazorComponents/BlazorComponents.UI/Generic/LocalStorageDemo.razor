@@ -1,0 +1,45 @@
+﻿@using BlazorComponents.UI.Services
+@using System.IO
+
+<h3>SessionDemo</h3>
+
+<input type="text" @bind="this._inputText" />
+<p>@this._obtainedText</p>
+<button class="btn btn-outline-primary" @onclick="SetToMyLocalStorage">Guardar Texto en mi modulo</button>
+<button class="btn btn-outline-primary" @onclick="GetFromMyLocalStorage">Recuperar Texto de mi modulo</button>
+<p>
+    @_json
+</p>
+
+@code {
+    [Inject] IJSRuntime JS { get; set; }
+    [Inject] Microsoft.Extensions.Hosting.IHostEnvironment Web { get; set; }
+    [Inject] LocalStorageService myService { get; set; }
+
+    private string _inputText = string.Empty;
+    private string _obtainedText = string.Empty;
+    private string _json;
+
+
+    private async void GetFromMyLocalStorage()
+    {
+        
+        var result = await myService.GetItem("miJSON2");
+        _json = result;
+
+        StateHasChanged();
+    }
+
+    private async void SetToMyLocalStorage()
+    {
+
+        using (FileStream fs = new FileStream($"{Web.ContentRootPath}/wwwroot/resources/ExampleJSON.json", FileMode.Open))
+        {
+            using (StreamReader sr = new StreamReader(fs))
+            {
+                var result = sr.ReadToEnd();
+                await myService.SetItem("miJSON2", result);
+            }
+        }
+    }
+}
