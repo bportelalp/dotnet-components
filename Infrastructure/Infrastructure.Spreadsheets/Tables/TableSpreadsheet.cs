@@ -16,11 +16,9 @@ namespace Infrastructure.Spreadsheets.Tables
     public class TableSpreadsheet<T>
     {
         private List<T> RowItems { get; set; }
-
-
-        private MemoryStream _documentStream = new MemoryStream();
-        private SpreadsheetDocument _document;
         private List<TableColumn<T>> _columns = new List<TableColumn<T>>();
+        private string _tableName = string.Empty;
+        private string _fileName = nameof(T);
 
 
         public TableSpreadsheet<T> AddIndexColumn(Expression<Func<T, object>> predicate)
@@ -47,6 +45,11 @@ namespace Infrastructure.Spreadsheets.Tables
             return this;
         }
 
+        public TableSpreadsheet<T> SetSheetName(string name)
+        {
+            _tableName = name;
+            return this;
+        }
 
         public TableSpreadsheet<T> Compile()
         {
@@ -83,7 +86,7 @@ namespace Infrastructure.Spreadsheets.Tables
                 case ESpreadsheetType.CsvSemicolonSeparated:
                     return CreateCsv(spreadsheetType);
                 case ESpreadsheetType.Excel:
-                    return CreateExcelSpreadsheet();
+                    return CreateXlsx();
                 default: return null;
             }
         }
@@ -124,37 +127,54 @@ namespace Infrastructure.Spreadsheets.Tables
         }
 
 
-
-
-        private MemoryStream CreateExcelSpreadsheet()
+        private MemoryStream CreateXlsx()
         {
-            _document = SpreadsheetDocument.Create(@"C:\Users\bportela\Datos\Dev\dotnet-components\Test\SpreadsheetsTestbench\hoja.xlsx", SpreadsheetDocumentType.Workbook);
-            WorkbookPart workbookpart = _document.AddWorkbookPart();
-            workbookpart.Workbook = new Workbook();
-            WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
-            worksheetPart.Worksheet = new Worksheet(new SheetData());
-
-            // Add Sheets to the Workbook.
-            Sheets sheets = _document.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
-            Sheet sheet = new Sheet()
+            MemoryStream ms = new MemoryStream();
+            using (SpreadsheetDocument spreadSheet = SpreadsheetDocument.Create(ms, SpreadsheetDocumentType.Workbook))
             {
-                Id = _document.WorkbookPart.GetIdOfPart(worksheetPart),
-                SheetId = 1,
-                Name = "Table"
-            };
+                WorkbookPart workbookpart = spreadSheet.AddWorkbookPart();
+                workbookpart.Workbook = new Workbook();
+                WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
+                worksheetPart.Worksheet = new Worksheet();
 
-            sheets.Append(sheet);
-            workbookpart.Workbook.Save();
-            _document.Close();
+                // Add Sheets to the Workbook.
+                Sheets sheets = spreadSheet.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
+                Sheet sheet = new Sheet()
+                {
+                    Id = spreadSheet.WorkbookPart.GetIdOfPart(worksheetPart),
+                    SheetId = 1,
+                    Name = string.IsNullOrWhiteSpace(this._tableName) ? $"Lista de {typeof(T).Name}" : this._tableName
+                };
+                sheets.Append(sheet);
 
-            return _documentStream;
+                workbookpart.Workbook.Save();
+                SheetData sheetData = worksheetPart.Worksheet.AppendChild(new SheetData());
+
+                //Header
+                Row row = new Row();
+                foreach (var column in this._columns)
+                {
+                    row.Append(Tools.CreateCell(column.Title, CellValues.String));
+                }
+                sheetData.AppendChild(row);
+
+                //Rows
+                foreach (var item in this.RowItems)
+                {
+                    row = new Row();
+                    foreach (var column in this._columns)
+                    {
+                        row.Append(Tools.CreateCell(column.Evaluate(item).ToString(), column.GetCellValues(item)));
+                    }
+                    sheetData.AppendChild(row);
+                }
+
+                workbookpart.Workbook.Save();
+                spreadSheet.Close();
+            }
+            return ms;
+            
         }
 
-        private void CheckCreate()
-        {
-            if (_document is null)
-                throw new InvalidOperationException("Call Create method before init");
-
-        }
     }
 }

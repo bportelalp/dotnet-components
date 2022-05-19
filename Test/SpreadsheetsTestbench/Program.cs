@@ -11,16 +11,20 @@ var myList = new List<MyData>()
 
 
 var excel = new TableSpreadsheet<MyData>();
-excel.AddItems(myList);
-excel.AddColumn(c => c.Integer).WithTitle("Entero");
-excel.AddColumn(c => c.Text);
-excel.AddColumn(c=> c);
+excel.AddItems(myList).SetSheetName("Mi tabla");
+excel.AddColumn(c => c.Integer);
+excel.AddColumn(c => c.Text).WithTitle("Texto");
+excel.AddColumn(c => c);
 
 excel.AddRow(new MyData(5, "que tal"));
 
+var enviroment = System.Environment.CurrentDirectory;
+string projectDirectory = Directory.GetParent(enviroment).Parent.Parent.FullName;
 
-var path = @"C:\Users\bportela\Datos\Dev\dotnet-components\Test\SpreadsheetsTestbench\hoja.csv";
-excel.CreateSpreadsheet(path, Infrastructure.Spreadsheets.Common.ESpreadsheetType.CsvSemicolonSeparated);
+var path = Path.Combine(projectDirectory, $"Resultados\\{DateTime.Now.ToString("yyMMdd_HHmm")}_hoja.xlsx");
+excel.CreateSpreadsheet(path, Infrastructure.Spreadsheets.Common.ESpreadsheetType.Excel);
+
+
 public class MyData
 {
     public int Integer { get; set; }

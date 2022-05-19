@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Infrastructure.Spreadsheets.Common;
 using System;
@@ -11,6 +12,19 @@ namespace Infrastructure.Spreadsheets
 {
     internal static class Tools
     {
+
+        internal static Cell CreateCell(string value, CellValues dataType)
+        {
+            return new Cell()
+            {
+                CellValue = new CellValue(value),
+                DataType = new EnumValue<CellValues>(dataType)
+            };
+        }
+
+
+
+
         internal static WorksheetPart InsertWorksheet(WorkbookPart workbook, string sheetName, Columns columns)
         {
             WorksheetPart newWSP = workbook.AddNewPart<WorksheetPart>();
@@ -36,6 +50,7 @@ namespace Infrastructure.Spreadsheets
             workbook.Workbook.Save();
             return newWSP;
         }
+
 
 
         internal static string CsvSeparator(ESpreadsheetType spreadsheetType)
