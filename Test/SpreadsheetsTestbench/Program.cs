@@ -1,40 +1,26 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Infrastructure.Spreadsheets.Tables;
+﻿using Infrastructure.Spreadsheets.Tables;
+using SpreadsheetsTestbench;
 
 Console.WriteLine("Hello, World!");
 
-var myList = new List<MyData>()
+var myList = new List<MyTestClass>()
 {
-    new MyData(1, "Hola"),
-    new MyData(2, "Mundo")
+    new MyTestClass(1, "Hola", DateTime.Today),
+    new MyTestClass(2, "Mundo", DateTime.Now)
 };
 
+var tableExcel = new TableSpreadsheet<MyTestClass>();
+tableExcel.AddItems(myList).SetSheetName($"Tabla de objetos {nameof(MyTestClass)}");
+tableExcel.AddColumn(c => c.Integer).SetTitle("Número entero");
+tableExcel.AddColumn(c => c.Text).SetTitle("Texto");
+tableExcel.AddColumn(c => c.Date, "Fecha");
+tableExcel.AddColumn(c => c);
 
-var excel = new TableSpreadsheet<MyData>();
-excel.AddItems(myList).SetSheetName("Mi tabla");
-excel.AddColumn(c => c.Integer);
-excel.AddColumn(c => c.Text).WithTitle("Texto");
-excel.AddColumn(c => c);
+tableExcel.AddRow(new MyTestClass(5, "que tal", DateTime.MinValue));
 
-excel.AddRow(new MyData(5, "que tal"));
-
-var enviroment = System.Environment.CurrentDirectory;
-string projectDirectory = Directory.GetParent(enviroment).Parent.Parent.FullName;
-
+string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
 var path = Path.Combine(projectDirectory, $"Resultados\\{DateTime.Now.ToString("yyMMdd_HHmm")}_hoja.xlsx");
-excel.CreateSpreadsheet(path, Infrastructure.Spreadsheets.Common.ESpreadsheetType.Excel);
-
-
-public class MyData
-{
-    public int Integer { get; set; }
-    public string Text { get; set; }
-    public MyData(int integer, string text)
-    {
-        Integer = integer;
-        Text = text;
-    }
-}
+tableExcel.CreateSpreadsheet(path, Infrastructure.Spreadsheets.Common.ESpreadsheetType.Excel);
 
 
 

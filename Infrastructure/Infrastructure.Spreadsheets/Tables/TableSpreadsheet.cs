@@ -15,12 +15,15 @@ namespace Infrastructure.Spreadsheets.Tables
 {
     public class TableSpreadsheet<T>
     {
-        private List<T> RowItems { get; set; }
+
+        public ICollection<T> RowItems { get; private set; }
+        public string SheetName {get; set; } = string.Empty;
+
         private List<TableColumn<T>> _columns = new List<TableColumn<T>>();
-        private string _tableName = string.Empty;
         private string _fileName = nameof(T);
 
 
+        #region Fluent API Methods
         public TableSpreadsheet<T> AddIndexColumn(Expression<Func<T, object>> predicate)
         {
             return this;
@@ -38,6 +41,7 @@ namespace Infrastructure.Spreadsheets.Tables
             this._columns.Add(column);
             return column;
         }
+        public TableColumn<T> AddColumn(Expression<Func<T, object>> predicate, string headerName) => this.AddColumn(predicate).SetTitle(headerName);
 
         public TableSpreadsheet<T> AddRow(T row)
         {
@@ -45,32 +49,20 @@ namespace Infrastructure.Spreadsheets.Tables
             return this;
         }
 
+
         public TableSpreadsheet<T> SetSheetName(string name)
         {
-            _tableName = name;
+            SheetName = name;
             return this;
         }
+        #endregion
 
-        public TableSpreadsheet<T> Compile()
-        {
-            List<string> lines = new List<string>();
-            foreach (var item in RowItems)
-            {
-                var currentLine = string.Empty;
-                foreach (var column in _columns)
-                {
-                    currentLine = currentLine + Convert.ToString(column.Evaluate(item)) + "; ";
-                }
-                lines.Add(currentLine);
-            }
-            return this;
-        }
-
+        #region Export Spreadsheet methods
         public void CreateSpreadsheet(string path, ESpreadsheetType spreadsheetType)
         {
             using (FileStream fs = new FileStream(path, FileMode.Create))
             {
-                using (MemoryStream ms = CreateSpreadsheet(spreadsheetType))
+                using (MemoryStream ms = this.CreateSpreadsheet(spreadsheetType))
                 {
                     ms.Seek(0, SeekOrigin.Begin);
                     ms.CopyTo(fs);
@@ -90,30 +82,12 @@ namespace Infrastructure.Spreadsheets.Tables
                 default: return null;
             }
         }
+        #endregion
 
+        #region Private methods to create Spreadsheet document
         private MemoryStream CreateCsv(ESpreadsheetType spreadsheetType)
         {
-            string separator = Tools.CsvSeparator(spreadsheetType);
-            List<string> lines = new List<string>();
-            string inputLine = string.Empty;
-
-            //Copy Header
-            foreach (var column in _columns)
-            {
-                inputLine += column.Title + separator;
-            }
-            lines.Add(inputLine);
-
-            //Copy items
-            foreach (var item in RowItems)
-            {
-                inputLine = string.Empty;
-                foreach (var column in _columns)
-                {
-                    inputLine += column.Evaluate(item) + separator;
-                }
-                lines.Add(inputLine);
-            }
+            var lines = this.CreateLines(Tools.CsvSeparator(spreadsheetType));
 
             MemoryStream ms = new MemoryStream();
             StreamWriter sw = new StreamWriter(ms);
@@ -122,6 +96,7 @@ namespace Infrastructure.Spreadsheets.Tables
                 sw.WriteLine(line);
             }
             sw.Flush();
+            sw.Dispose();
             return ms;
 
         }
@@ -143,7 +118,7 @@ namespace Infrastructure.Spreadsheets.Tables
                 {
                     Id = spreadSheet.WorkbookPart.GetIdOfPart(worksheetPart),
                     SheetId = 1,
-                    Name = string.IsNullOrWhiteSpace(this._tableName) ? $"Lista de {typeof(T).Name}" : this._tableName
+                    Name = string.IsNullOrWhiteSpace(this.SheetName) ? $"Lista de {typeof(T).Name}" : this.SheetName
                 };
                 sheets.Append(sheet);
 
@@ -173,8 +148,33 @@ namespace Infrastructure.Spreadsheets.Tables
                 spreadSheet.Close();
             }
             return ms;
-            
         }
+
+        private List<string> CreateLines(string separator)
+        {
+            List<string> lines = new List<string>();
+            string inputLine = string.Empty;
+
+            //Copy Header
+            foreach (var column in _columns)
+            {
+                inputLine += column.Title + separator;
+            }
+            lines.Add(inputLine);
+
+            //Copy items
+            foreach (var item in RowItems)
+            {
+                inputLine = string.Empty;
+                foreach (var column in _columns)
+                {
+                    inputLine += column.Evaluate(item) + separator;
+                }
+                lines.Add(inputLine);
+            }
+            return lines;
+        }
+        #endregion
 
     }
 }
