@@ -48,7 +48,7 @@ namespace Infrastructure.Spreadsheets
             if (type == typeof(string))
             {
                 dataType = CellValues.String;
-                cellContent = new CellValue(Convert.ToString(value));
+                cellContent = new CellValue(Convert.ToString(value)?? string.Empty);
             }
             else if (type == typeof(Int32))
             {
@@ -73,12 +73,12 @@ namespace Infrastructure.Spreadsheets
             else if (type == typeof(DateTime))
             {
                 dataType = CellValues.String;
-                cellContent = new CellValue(Convert.ToString(value));
+                cellContent = new CellValue(Convert.ToString(value)?? string.Empty);
             }
             else
             {
                 dataType = CellValues.String;
-                cellContent = new CellValue(Convert.ToString(value));
+                cellContent = new CellValue(Convert.ToString(value)?? string.Empty);
             }
 
             return new Cell()
@@ -115,17 +115,5 @@ namespace Infrastructure.Spreadsheets
             return newWSP;
         }
 
-
-
-        internal static string CsvSeparator(ESpreadsheetType spreadsheetType)
-        {
-            switch (spreadsheetType)
-            {
-                case ESpreadsheetType.CsvCommaSeparated: return ",";
-                case ESpreadsheetType.CsvSemicolonSeparated: return ";";
-                case ESpreadsheetType.Excel: return string.Empty;
-                default: return string.Empty;
-            }
-        }
     }
 }
