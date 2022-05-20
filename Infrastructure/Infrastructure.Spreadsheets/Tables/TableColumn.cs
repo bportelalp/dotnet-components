@@ -12,6 +12,7 @@ namespace Infrastructure.Spreadsheets.Tables
     {
         public string Title { get => GetTitle(); set => _title = value; }
         public Expression<Func<T, object>> ColData { get => _colData; set { _colData = value; _colDataCompiled = ColData.Compile(); } }
+        
 
 
         public TableColumn() { }

@@ -17,15 +17,22 @@ namespace Infrastructure.Spreadsheets.Tables
     {
 
         public ICollection<T> RowItems { get; private set; }
-        public string SheetName {get; set; } = string.Empty;
+        public string SheetName { get; set; } = string.Empty;
+        public bool AutoWidth { get; private set; } = false;
 
         private List<TableColumn<T>> _columns = new List<TableColumn<T>>();
         private string _fileName = nameof(T);
 
 
+
         #region Fluent API Methods
         public TableSpreadsheet<T> AddIndexColumn(Expression<Func<T, object>> predicate)
         {
+            return this;
+        }
+        public TableSpreadsheet<T> SetAutoWidth(bool enable)
+        {
+            AutoWidth = enable;
             return this;
         }
 
@@ -122,9 +129,8 @@ namespace Infrastructure.Spreadsheets.Tables
                 };
                 sheets.Append(sheet);
 
-                workbookpart.Workbook.Save();
-                SheetData sheetData = worksheetPart.Worksheet.AppendChild(new SheetData());
 
+                SheetData sheetData = new SheetData();
                 //Header
                 Row row = new Row();
                 foreach (var column in this._columns)
@@ -139,15 +145,51 @@ namespace Infrastructure.Spreadsheets.Tables
                     row = new Row();
                     foreach (var column in this._columns)
                     {
-                        row.Append(Tools.CreateCell(column.Evaluate(item).ToString(), column.GetCellValues(item)));
+                        object value = column.Evaluate(item);
+                        row.Append(Tools.CreateCell(value));
                     }
                     sheetData.AppendChild(row);
                 }
 
+
+                //Append columns with width calculated
+                worksheetPart.Worksheet.Append(this.CreateColumnsWithWidth(sheetData));
+                worksheetPart.Worksheet.AppendChild(sheetData);
                 workbookpart.Workbook.Save();
                 spreadSheet.Close();
             }
             return ms;
+        }
+
+
+        private Columns CreateColumnsWithWidth(SheetData sheetData)
+        {
+            var widths = this.CalculateColumnsWidth(sheetData);
+            Columns columns = new Columns();
+            foreach (var item in widths)
+            {
+                UInt32 index = (uint)(item.Key + 1);
+                columns.Append(new Column() { Min = index, Max = index, Width = item.Value, CustomWidth = true });
+            }
+            return columns;
+        }
+
+        private Dictionary<int, double> CalculateColumnsWidth(SheetData sheetData)
+        {
+            Dictionary<int, double> colWidths = new Dictionary<int, double>();
+            foreach (var row in sheetData.Descendants<Row>())
+            {
+                int index = 0;
+                foreach (var cell in row.Descendants<Cell>())
+                {
+                    if (!colWidths.ContainsKey(index)) colWidths.Add(index, 0);
+                    var width = Tools.GetMinColumnWidth(cell.CellValue.Text);
+                    colWidths[index] = width > colWidths[index] ? width : colWidths[index];
+                    index++;
+                }
+            }
+
+            return colWidths;
         }
 
         private List<string> CreateLines(string separator)
