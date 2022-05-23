@@ -14,7 +14,7 @@ using Infrastructure.Spreadsheets.Common;
 namespace Infrastructure.Spreadsheets.Tables
 {
     public abstract class TableBase<T> where T : class
-    { 
+    {
         public ICollection<T> Items { get; private set; }
 
         protected List<TableColumn<T>> _columns = new List<TableColumn<T>>();
@@ -26,13 +26,16 @@ namespace Infrastructure.Spreadsheets.Tables
             this.Items = Items.ToList();
         }
 
+        public abstract void Create(string path);
+        public abstract MemoryStream Create();
+
         #region Fluent API Methods
         /// <summary>
         /// Add the elements of the specified collection to <see cref="TableBase{T}.Items"/>
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        public TableBase<T> AddItems(IEnumerable<T> items)
+        public virtual TableBase<T> AddItems(IEnumerable<T> items)
         {
             this.Items = items.ToList();
             return this;
@@ -43,7 +46,7 @@ namespace Infrastructure.Spreadsheets.Tables
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        public TableBase<T> AddRange(IEnumerable<T> items)
+        public virtual TableBase<T> AddRange(IEnumerable<T> items)
         {
             this.Items.ToList().AddRange(items);
             return this;
@@ -54,7 +57,7 @@ namespace Infrastructure.Spreadsheets.Tables
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        public TableBase<T> Add(T items)
+        public virtual TableBase<T> Add(T items)
         {
             this.Items.Add(items);
             return this;
@@ -78,8 +81,14 @@ namespace Infrastructure.Spreadsheets.Tables
         /// <param name="headerName">Name to define column</param>
         /// <returns></returns>
         public TableColumn<T> AddColumn(Expression<Func<T, object>> predicate, string headerName) => this.AddColumn(predicate).SetTitle(headerName);
-
         #endregion
+
+
+        protected TableBase<T> AddColumns(List<TableColumn<T>> tableColumns)
+        {
+            _columns = tableColumns;
+            return this;
+        }
 
     }
 }

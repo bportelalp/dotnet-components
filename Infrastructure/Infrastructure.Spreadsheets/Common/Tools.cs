@@ -14,8 +14,13 @@ namespace Infrastructure.Spreadsheets
 {
     internal static class Tools
     {
-
-        internal static double GetMinColumnWidth(string text)
+        /// <summary>
+        /// Calculate lenght of text in inches. This Method is used to adjust columns width of excel spreadsheets.
+        /// NOTE: it works only on Windows
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        internal static double GetTextInches(string text)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) //Porque System.Drawing.Graphics solo funciona en Windows
             {
@@ -31,6 +36,13 @@ namespace Infrastructure.Spreadsheets
                 return 10.71; //TODO-Default width? 
             }
         }
+
+        /// <summary>
+        /// Create cell based on data converted to string and datatype
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="dataType"></param>
+        /// <returns></returns>
         internal static Cell CreateCell(string value, CellValues dataType)
         {
             return new Cell()
@@ -40,6 +52,11 @@ namespace Infrastructure.Spreadsheets
             };
         }
 
+        /// <summary>
+        /// Create Cell with <see cref="object"/> value, where <see cref="CellType.DataType"/> is calculated based on <see cref="Type"/>
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         internal static Cell CreateCell(object value)
         {
             CellValue cellContent;
@@ -55,12 +72,12 @@ namespace Infrastructure.Spreadsheets
                 dataType = CellValues.Number;
                 cellContent = new CellValue(Convert.ToInt32(value));
             }
-            else if (type == typeof(double))
+            else if (type == typeof(double) || type == typeof(float))
             {
                 dataType = CellValues.Number;
                 cellContent = new CellValue(Convert.ToDouble(value));
             }
-            else if (type == typeof(float))
+            else if (type == typeof(decimal))
             {
                 dataType = CellValues.Number;
                 cellContent = new CellValue(Convert.ToDecimal(value));

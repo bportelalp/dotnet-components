@@ -29,25 +29,43 @@ namespace Infrastructure.Spreadsheets.Tables
             return this;
         }
 
+        /// <summary>
+        /// Establish the name of sheet
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public TableExcel<T> SetSheetName(string name)
         {
             SheetName = name;
             return this;
         }
+        
 
-        public void CreateExcel(string path)
+        #region Creation Methods
+        /// <summary>
+        /// Created Excel Spreadsheet on filesystem
+        /// </summary>
+        /// <param name="path"></param>
+        /// <exception cref="ArgumentException">When path is incorrect</exception>
+        public override void Create(string path)
         {
+            if (!path.ToLower().EndsWith(".xlsx"))
+                throw new ArgumentException($"Path is not related to file with extension .xlsx");
             using (FileStream fs = new FileStream(path, FileMode.Create))
             {
-                using (MemoryStream ms = this.CreateXlsx())
+                using (MemoryStream ms = this.Create())
                 {
                     ms.Seek(0, SeekOrigin.Begin);
                     ms.CopyTo(fs);
                 }
             }
         }
-
-        private MemoryStream CreateXlsx()
+       
+        /// <summary>
+        /// Create Excel Spreadsheet
+        /// </summary>
+        /// <returns></returns>
+        public override MemoryStream Create()
         {
             MemoryStream ms = new MemoryStream();
             using (SpreadsheetDocument spreadSheet = SpreadsheetDocument.Create(ms, SpreadsheetDocumentType.Workbook))
@@ -100,6 +118,18 @@ namespace Infrastructure.Spreadsheets.Tables
             }
             return ms;
         }
+        #endregion
+
+        public TableCsv<T> ToCsv()
+        {
+            var csv = new TableCsv<T>();
+            csv.AddItems(this.Items);
+            foreach (var column in this._columns)
+            {
+                csv.AddColumn(column.ColData, column.Title);
+            }
+            return csv;
+        }
 
         protected Columns CreateColumnsWithWidth(SheetData sheetData)
         {
@@ -113,6 +143,11 @@ namespace Infrastructure.Spreadsheets.Tables
             return columns;
         }
 
+        /// <summary>
+        /// Returns a <see cref="Dictionary{int, double}"/> of Columns named by number with recommended width 
+        /// </summary>
+        /// <param name="sheetData"></param>
+        /// <returns></returns>
         protected Dictionary<int, double> CalculateColumnsWidth(SheetData sheetData)
         {
             Dictionary<int, double> colWidths = new Dictionary<int, double>();
@@ -122,7 +157,7 @@ namespace Infrastructure.Spreadsheets.Tables
                 foreach (var cell in row.Descendants<Cell>())
                 {
                     if (!colWidths.ContainsKey(index)) colWidths.Add(index, 0);
-                    var width = Tools.GetMinColumnWidth(cell.CellValue.Text);
+                    var width = Tools.GetTextInches(cell.CellValue.Text);
                     colWidths[index] = width > colWidths[index] ? width : colWidths[index];
                     index++;
                 }
