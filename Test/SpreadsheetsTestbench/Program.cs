@@ -20,7 +20,6 @@ tableExcel.AddColumn(c => c);
 
 tableExcel.Add(new MyTestClass(5, "que tal", DateTime.MinValue));
 
-var tableCsv = tableExcel.ToCsv();
 
 
 string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
@@ -28,6 +27,8 @@ var path = Path.Combine(projectDirectory, $"Resultados\\{DateTime.Now.ToString("
 var path2 = Path.Combine(projectDirectory, $"Resultados\\{DateTime.Now.ToString("yyMMdd_HHmm")}_hoja.csv");
 
 tableExcel.Create(path);
+
+var tableCsv = tableExcel.ToCsv();
 tableCsv.ConfigureSeparator(Infrastructure.Spreadsheets.Common.ECsvSeparator.Semicolon).Create(path2);
 
 
