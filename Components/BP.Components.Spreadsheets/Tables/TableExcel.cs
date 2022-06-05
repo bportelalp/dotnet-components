@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Spreadsheets.Tables
+namespace BP.Components.Spreadsheets.Tables
 {
     public class TableExcel<T> : TableBase<T> where T : class
     {

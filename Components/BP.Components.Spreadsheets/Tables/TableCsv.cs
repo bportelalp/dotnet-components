@@ -1,11 +1,11 @@
-﻿using Infrastructure.Spreadsheets.Common;
+﻿using BP.Components.Spreadsheets.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Spreadsheets.Tables
+namespace BP.Components.Spreadsheets.Tables
 {
     public class TableCsv<T> : TableBase<T> where T : class
     {

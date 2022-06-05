@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Spreadsheets.Common
+namespace BP.Components.Spreadsheets.Common
 {
     public enum ECsvSeparator
     {

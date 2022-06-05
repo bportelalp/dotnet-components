@@ -9,9 +9,9 @@ using DocumentFormat.OpenXml.Packaging;
 using System.Linq.Expressions;
 using System.Data;
 using DocumentFormat.OpenXml.Spreadsheet;
-using Infrastructure.Spreadsheets.Common;
+using BP.Components.Spreadsheets.Common;
 
-namespace Infrastructure.Spreadsheets.Tables
+namespace BP.Components.Spreadsheets.Tables
 {
     public abstract class TableBase<T> where T : class
     {

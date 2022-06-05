@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using Infrastructure.Spreadsheets.Common;
+using BP.Components.Spreadsheets.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace Infrastructure.Spreadsheets
+namespace BP.Components.Spreadsheets
 {
     internal static class Tools
     {
