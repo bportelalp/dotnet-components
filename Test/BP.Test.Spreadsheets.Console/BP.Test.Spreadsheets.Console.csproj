@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Source\BP.Components.Spreadsheets\BP.Components.Spreadsheets.csproj" />
+    <ProjectReference Include="..\..\Components\BP.Components.Spreadsheets\BP.Components.Spreadsheets.csproj" />
   </ItemGroup>
 
 </Project>
