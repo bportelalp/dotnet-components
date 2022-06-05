@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpreadsheetsTestbench
+namespace BP.Test.SpreadSheets.Console
 {
     internal class MyTestClass
     {

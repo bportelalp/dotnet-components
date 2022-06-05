@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Spreadsheets.Tables
+namespace BP.Components.Spreadsheets.Tables
 {
     public class TableColumn<T>
     {

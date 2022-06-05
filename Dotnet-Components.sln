@@ -13,14 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workbench.BlazorServer", "U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workbench.BlazorWebAssembly", "User\Workbench.BlazorWebAssembly\Workbench.BlazorWebAssembly.csproj", "{B4300A4F-11FB-4A69-9AA4-1B6C7012AD18}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{D7546AD6-F192-4438-8154-8B4E9A7ABDA8}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Spreadsheets", "Infrastructure\Infrastructure.Spreadsheets\Infrastructure.Spreadsheets.csproj", "{B0A8F51F-C80B-4AD2-B355-B3C96078E608}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{FCCE64E1-7B1D-4A58-A723-6AAD83051DF4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetsTestbench", "Test\SpreadsheetsTestbench\SpreadsheetsTestbench.csproj", "{91BEDD11-C7E0-4612-B711-9FD8D554E104}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,14 +31,6 @@ Global
 		{B4300A4F-11FB-4A69-9AA4-1B6C7012AD18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4300A4F-11FB-4A69-9AA4-1B6C7012AD18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4300A4F-11FB-4A69-9AA4-1B6C7012AD18}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0A8F51F-C80B-4AD2-B355-B3C96078E608}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0A8F51F-C80B-4AD2-B355-B3C96078E608}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0A8F51F-C80B-4AD2-B355-B3C96078E608}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0A8F51F-C80B-4AD2-B355-B3C96078E608}.Release|Any CPU.Build.0 = Release|Any CPU
-		{91BEDD11-C7E0-4612-B711-9FD8D554E104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{91BEDD11-C7E0-4612-B711-9FD8D554E104}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{91BEDD11-C7E0-4612-B711-9FD8D554E104}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{91BEDD11-C7E0-4612-B711-9FD8D554E104}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,8 +39,6 @@ Global
 		{23011FC3-A8ED-4489-8BBE-9DE165F38C03} = {FED5B3C2-F478-4600-B3B2-F235003297E5}
 		{F5D62914-86B0-4A39-8A2B-D6EEAF3EC077} = {68537574-8EA0-489E-BDFE-8727DEEA068E}
 		{B4300A4F-11FB-4A69-9AA4-1B6C7012AD18} = {68537574-8EA0-489E-BDFE-8727DEEA068E}
-		{B0A8F51F-C80B-4AD2-B355-B3C96078E608} = {D7546AD6-F192-4438-8154-8B4E9A7ABDA8}
-		{91BEDD11-C7E0-4612-B711-9FD8D554E104} = {FCCE64E1-7B1D-4A58-A723-6AAD83051DF4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD8231FD-AD05-4D1E-A348-77C44492D50D}

@@ -13,8 +13,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\BlazorComponents\BlazorComponents.UI\BlazorComponents.UI.csproj" />
-  </ItemGroup>
-
 </Project>

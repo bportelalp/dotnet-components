@@ -1,5 +1,5 @@
-﻿using Infrastructure.Spreadsheets.Tables;
-using SpreadsheetsTestbench;
+﻿using BP.Components.Spreadsheets.Tables;
+using BP.Test.SpreadSheets.Console;
 
 Console.WriteLine("Hello, World!");
 
@@ -27,9 +27,13 @@ var path = Path.Combine(projectDirectory, $"Resultados\\{DateTime.Now.ToString("
 var path2 = Path.Combine(projectDirectory, $"Resultados\\{DateTime.Now.ToString("yyMMdd_HHmm")}_hoja.csv");
 
 tableExcel.Create(path);
+<<<<<<< HEAD:Test/SpreadsheetsTestbench/Program.cs
 
 var tableCsv = tableExcel.ToCsv();
 tableCsv.ConfigureSeparator(Infrastructure.Spreadsheets.Common.ECsvSeparator.Semicolon).Create(path2);
+=======
+tableCsv.ConfigureSeparator(BP.Components.Spreadsheets.Common.ECsvSeparator.Semicolon).Create(path2);
+>>>>>>> ft/spreadsheets:Test/BP.Test.Spreadsheets.Console/Program.cs
 
 
 
