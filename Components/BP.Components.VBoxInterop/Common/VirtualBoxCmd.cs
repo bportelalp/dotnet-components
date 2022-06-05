@@ -8,10 +8,11 @@ namespace BP.Components.VBoxInterop.Common
 {
     public struct VirtualBoxCmd
     {
-        public static readonly string VBOX_CMD = "VBoxManage";
-        public static readonly string CMD_START_VM = VBOX_CMD + " startvm";
+        public static readonly string VBOXMANAGER = "VBoxManage";
+        public static readonly string CMD_START_VM = "startvm";
+        public static readonly string CMD_LIST_VMS = "list vms";
         public static readonly string OPT_HEADLESS = "--type headless";
-        public static readonly string CMD_CTRL_VM = VBOX_CMD + " controlvm";
+        public static readonly string CMD_CTRL_VM = "controlvm";
         public static readonly string OPT_CTRL_SAVE = "savestate";
         public static readonly string OPT_CTRL_RESUME = "resume";
         public static readonly string OPT_CTRL_RESET = "reset";

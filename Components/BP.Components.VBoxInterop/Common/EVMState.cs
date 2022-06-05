@@ -8,10 +8,11 @@ namespace BP.Components.VBoxInterop.Common
 {
     public enum EVMState
     {
-        Stopped = 0,
-        Starting = 1,
-        Running = 2,
-        Pausing = 3,
-        Paused = 4,
+        Unknown = 0,
+        Stopped = 1,
+        Starting = 2,
+        Running = 3,
+        Pausing = 4,
+        Paused = 5,
     }
 }
