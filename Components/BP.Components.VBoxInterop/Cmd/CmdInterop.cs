@@ -10,6 +10,8 @@ namespace BP.Components.VBoxInterop.Cmd
 {
     public class CmdInterop
     {
+        public event DataReceivedEventHandler DataReceived;
+        private List<string> output;
         public string ListVMs()
         {
             var proc = this.InitializeProcess(VirtualBoxCmd.CMD_LIST_VMS);
@@ -18,21 +20,32 @@ namespace BP.Components.VBoxInterop.Cmd
             return result;
         }
 
-        public string GetInfo()
+        public List<string> RunCommand(string args)
         {
-            var proc = this.InitializeProcess("showvminfo \"webserver\" --machinereadable");
+            var proc = this.InitializeProcess(args);
             proc.Start();
-            var result = proc.StandardOutput.ReadToEnd();
+            proc.BeginOutputReadLine();
+            proc.WaitForExit();
+            //var result = proc.StandardOutput.ReadToEnd();
+            proc.Close();
+            var result = output;
             return result;
         }
 
         private Process InitializeProcess(string arguments)
         {
+            output = new List<string>();
             Process proc = new Process();
             proc.StartInfo.FileName = VirtualBoxCmd.VBOXMANAGER;
             proc.StartInfo.Arguments = arguments;
             proc.StartInfo.CreateNoWindow = true;
             proc.StartInfo.RedirectStandardOutput = true;
+            proc.OutputDataReceived += new DataReceivedEventHandler((o,e) =>
+            {
+                DataReceived?.Invoke(o, e);
+                if(!string.IsNullOrWhiteSpace(e.Data))
+                    output.Add(e.Data);
+            });
             return proc;
         }
     }

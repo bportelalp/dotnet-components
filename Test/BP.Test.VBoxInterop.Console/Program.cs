@@ -1,5 +1,6 @@
 ﻿using BP.Components.VBoxInterop;
 using BP.Components.VBoxInterop.Cmd;
+using BP.Components.VBoxInterop.Common;
 
 namespace BP.Test.VBoxInterop.Console
 {
@@ -8,7 +9,11 @@ namespace BP.Test.VBoxInterop.Console
         static void Main(string[] args)
         {
             var vbox = new VirtualBox();
-            vbox.GetVMs();
+            var vms = vbox.GetVMs();
+            var webserver = vms.FirstOrDefault();
+            webserver.Output += (s, e) => { System.Console.WriteLine(e.ToString()); };
+            var state = webserver.GetState();
         }
+
     }
 }

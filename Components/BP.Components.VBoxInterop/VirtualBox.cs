@@ -24,7 +24,6 @@ namespace BP.Components.VBoxInterop
             {
                 var name = line.Trim().Split(" ").FirstOrDefault()?.Replace("\"","");
                 var vm = new VirtualMachine(name);
-                vm.CheckVMState();
                 result.Add(vm);
             }
             return result;
