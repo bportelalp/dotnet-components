@@ -16,22 +16,28 @@ namespace BP.Components.Blazor.UI.Services
         {
             Js = js;
             moduleTask = new(() => js.InvokeAsync<IJSObjectReference>(
-               "import", "./_content/BlazorComponents.UI/ts/SessionManager.js").AsTask());
+               "import", "./_content/BP.Components.Blazor.UI/js/SessionManager.js").AsTask());
             //module = js.InvokeAsync<IJSObjectReference>("import", "./_content/BlazorComponents.UI/js/SessionManager.js").Result;
         }
 
         public IJSRuntime Js { get; }
 
-        public async ValueTask SetItem(string key, string value)
+        public async ValueTask SetItem<T>(string key, T value)
         {
             module = await moduleTask.Value;
             await module.InvokeVoidAsync("setItem", key,value);
         }
 
-        public async ValueTask<string> GetItem(string key)
+        public async ValueTask<T> GetItem<T>(string key)
         {
             module = await moduleTask.Value;
-            return await module.InvokeAsync<string>("getItem", key);
+            return await module.InvokeAsync<T>("getItem", key);
+        }
+
+        public async ValueTask DeleteItem(string key)
+        {
+            module = await moduleTask.Value;
+            await module.InvokeVoidAsync("deleteItem", key);
         }
 
     }
