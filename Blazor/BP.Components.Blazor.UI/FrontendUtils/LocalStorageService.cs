@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BP.Components.Blazor.UI.Services
+namespace BP.Components.Blazor.UI.FrontendUtils
 {
     public class LocalStorageService
     {
