@@ -2,14 +2,14 @@
 {
     public class RepoResponse<T>
     {
-        public RepoResponse(T response, bool error, HttpResponseMessage httpResponseMessage)
+        public RepoResponse(T response, bool success, HttpResponseMessage httpResponseMessage)
         {
-            Error = error;
+            Success = success;
             Response = response;
             HttpResponseMessage = httpResponseMessage;
         }
 
-        public bool Error { get; }
+        public bool Success { get; }
         public T Response { get; }
         public HttpResponseMessage HttpResponseMessage { get; }
 

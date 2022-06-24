@@ -22,7 +22,7 @@ namespace BP.Components.RepositoryClient
             if (response.IsSuccessStatusCode)
                 result = await response.Content.ReadFromJsonAsync<TResult>();
 
-            return new RepoResponse<TResult>(result, !response.IsSuccessStatusCode, response);
+            return new RepoResponse<TResult>(result, response.IsSuccessStatusCode, response);
         }
 
         public async Task<RepoResponse<TResult>> PostAsync<T, TResult>(string route, T body)
@@ -36,7 +36,7 @@ namespace BP.Components.RepositoryClient
             if (response.IsSuccessStatusCode)
                 result = await response.Content.ReadFromJsonAsync<TResult>();
 
-            return new RepoResponse<TResult>(result, !response.IsSuccessStatusCode, response);
+            return new RepoResponse<TResult>(result, response.IsSuccessStatusCode, response);
         }
 
         public async Task<RepoResponse<object>> PostAsync<T>(string route, T body)
@@ -45,7 +45,7 @@ namespace BP.Components.RepositoryClient
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var response = await httpClient.PostAsync(route, content);
-            return new RepoResponse<object>(null, !response.IsSuccessStatusCode, response);
+            return new RepoResponse<object>(null, response.IsSuccessStatusCode, response);
         }
 
         public async Task<RepoResponse<object>> Put<T>(string route, T body)
@@ -54,7 +54,7 @@ namespace BP.Components.RepositoryClient
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var response = await httpClient.PutAsync(route, content);
-            return new RepoResponse<object>(null, !response.IsSuccessStatusCode, response);
+            return new RepoResponse<object>(null, response.IsSuccessStatusCode, response);
         }
 
         public string BuildQuery(string route, params object[] args)
