@@ -1,0 +1,76 @@
+﻿@typeparam TRow
+@*
+    https://www.meziantou.net/creating-a-datagrid-component-in-blazor.htm
+    <CascadingValue> allows descendant components (defined in ChildContent) to receive the specified value.
+    Child components need to declare a cascading parameter with the same type as "Value" (i.e. Grid<TRowData>).
+    This allows GridColumn to get the Grid instance by using a CascadingParameter
+
+    [CascadingParameter]public Grid<TRowData> OwnerGrid { get; set; }
+
+    IsFixed="true" indicates that "Value" will not change. This is a
+    performance optimization that allows the framework to skip setting up
+    change notifications.
+*@
+<CascadingValue IsFixed="@FixedContent" Value="this">@ChildContent</CascadingValue>
+
+@* Render the table *@
+<table @attributes="@TableAttributes" class="@TableClass">
+    <thead class="@HeaderClass">
+        <tr>
+            @foreach (var column in Columns)
+            {
+                @column.HeaderTemplate
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Data != null)
+            {
+               
+                var index = 0;
+                foreach (var item in Data.Skip((Page - 1) * PageSize).Take(PageSize))
+                {
+                    @* Use @key to help the diff algorithm when updating the collection *@
+                    <tr @key="item.GetHashCode()" class="@(RowClass?.Invoke(item, index++))" @onclick="() => OnRowClick.InvokeAsync(item)">
+                        @foreach (var column in Columns)
+                        {
+                            @column.CellTemplate(item)
+                        }
+                    </tr>
+                }
+                if (Data.Count() > PageSize)
+                {
+                    <tr>
+                        <td colspan="@Columns.Count">
+
+                            <button class="btn btn-outline-info" @onclick="()=>ShowMore(-1)">&laquo;</button>
+                            @for (int i = 1; i <= Data.Count() / PageSize; i++)
+                            {
+                                string clase = "btn-outline-info";
+                                if (i == Page) clase = "btn-info";
+                                int ii = i;
+                                <button class="btn @clase ml-1" @onclick="()=> ShowPage(ii)"> @i </button>
+                            }
+
+                            @if (Data.Count() > Page * PageSize)
+                            {
+                                <button class="btn btn-outline-info ml-1" @onclick="()=>ShowMore(+1)">&raquo;</button>
+                            }
+                        </td>
+                    </tr>
+                }
+                @*if (Items.Count > Page * PageSize)
+                    {
+                    <tr>
+                    <td colspan="@columns.Count">
+                    <button class="btn btn-info" @onclick="()=>ShowMore(-1)">&laquo;</button>
+                    <button class="btn btn-info"> @Page </button>
+                    <button class="btn btn-info" @onclick="()=>ShowMore(+1)">&raquo;</button>
+                    </td>
+                    </tr>
+                    }*@
+            }
+        }
+    </tbody>
+</table>

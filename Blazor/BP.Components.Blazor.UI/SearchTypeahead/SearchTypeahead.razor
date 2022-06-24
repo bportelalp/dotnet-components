@@ -1,0 +1,74 @@
+﻿@typeparam TItem
+
+<div class="search-typeahead" @ref="typeahead">
+    <div class="search-typeahead__controls">
+        @if (IsShowingMask)
+        {
+            <div @ref="mask" class="search-typeahead__input-mask" @onclick="()=> HandleClickOnMask(false)">
+                @SelectedTemplate(Value)
+            </div>
+        }
+        <input @ref="searchInput"
+               class="search-typeahead__input form-control @(IsShowingMask ? "search-typeahead__input-hidden" : null)" style="height: auto"
+               @bind-value="@searchText"
+               @bind-value:event="oninput"
+               @onclick="@ShowSuggestions"
+               @onfocusin="@ShowSuggestions"
+               @onfocusout="@(async () => {await Task.Delay(300); IsShowingSuggestions = false;})"
+               type="text"
+               autocomplete="off"
+               placeholder="@Placeholder" />
+        <button class="btn btn-outline-primary search-typeahead__clear" type="button" 
+                @onclick="() => HandleClickOnMask(true)"
+                @onfocusout="@(async () => {await Task.Delay(300); IsShowingSuggestions = false; })">&times;</button>
+    </div>
+    @if (this.ShouldShowSuggestions())
+    {
+        <div class="search-typeahead__results">
+            @if (ResultTemplate == null)
+            {
+                <div class="table-responsive-md">
+                    <table class="table table-hover">
+                        @ResultTemplateTableHeader
+                        <tbody>
+                            @foreach (var item in Suggestions)
+                            {
+                                <tr @onclick="@(() => SelectResult(item))">
+                                    @ResultTemplateTableBody(item)
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            }
+            else
+            {
+                @foreach (var item in Suggestions)
+                {
+                    <div class="search-typeahead__result @GetSelectedSuggestionClass(item)" tabindex="0" @onclick="@(() => SelectResult(item))" @onkeyup="((e) => HandleKeyUpOnSuggestion(e,item))">
+                        @if (ResultTemplate != null)
+                        {
+                            @ResultTemplate(item)}
+                    </div>
+                }
+            }
+
+        </div>
+    }
+    else if (ShowNotFound())
+    {
+        <div class="search-typeahead__results">
+            @if (NotFoundTemplate != null)
+            {
+                <div class="search-typeahead__notfound">
+                    @NotFoundTemplate
+                </div> }
+            else
+            {
+                <div class="search-typeahead__notfound">
+                    Sin Resultados
+                </div>}
+        </div>}
+</div>
+

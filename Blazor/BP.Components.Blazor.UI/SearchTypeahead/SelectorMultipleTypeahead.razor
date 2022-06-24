@@ -1,0 +1,50 @@
+﻿@typeparam T
+
+<div class="d-flex">
+    <div class="flex-fill">
+        <SearchTypeahead TItem="T"
+                         SearchMethod="@((string value) => SearchMethod(value))"
+                         Value="@_itemSelected"
+                         ValueChanged="@((T item) => ItemSelected(item))">
+
+            <ResultTemplateTableHeader>
+                @ResultTemplateTableHeader
+            </ResultTemplateTableHeader>
+            <ResultTemplateTableBody Context="body">
+                @ResultTemplateTableBody(body)
+            </ResultTemplateTableBody>
+        </SearchTypeahead>
+    </div>
+    <button class="btn btn__clear btn-outline-danger " @onclick="@(()=> Value.Clear())">
+        Borrar todo
+    </button>
+</div>
+
+<ul class="list-group">
+    @foreach (var item in Value)
+    {
+        <li draggable="true"
+            @ondragstart="@(() => HandleDragStart(item))"
+            @ondragover="@(() => HandleDragOver(item))"
+            class="list-group-item list-group-item-action">
+            <div class="d-flex justify-content-between no-wrap">
+                <div class="d-flex" style="padding: .25em;">
+                    <div><b>@(Value.IndexOf(item)+1).- </b></div>
+                    <div>@ListTemplate(item)</div>
+                </div>
+                <div style="flex-basis: 8em;">
+                    <span class="btn btn-outline-info rounded__button" @onclick="@(()=>MoveUp(item))">
+                        <span class="oi oi-arrow-thick-top"></span>
+                    </span>
+                    <span class="btn btn-outline-info rounded__button" @onclick="@(()=>MoveDown(item))">
+                        <span class="oi oi-arrow-thick-bottom"></span>
+                    </span>
+                    <span class="btn btn-outline-info rounded__button" @onclick="@(() => Value.Remove(item))">
+                        <span class="oi oi-x"></span>
+                    </span>
+                </div>
+
+            </div>
+        </li>
+    }
+</ul>
