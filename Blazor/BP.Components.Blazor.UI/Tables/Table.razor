@@ -25,11 +25,11 @@
     </thead>
     <tbody>
         @{
-            if (Data != null)
+            if (Items != null)
             {
                
                 var index = 0;
-                foreach (var item in Data.Skip((Page - 1) * PageSize).Take(PageSize))
+                foreach (var item in Items.Skip((Page - 1) * PageSize).Take(PageSize))
                 {
                     @* Use @key to help the diff algorithm when updating the collection *@
                     <tr @key="item.GetHashCode()" class="@(RowClass?.Invoke(item, index++))" @onclick="() => OnRowClick.InvokeAsync(item)">
@@ -39,13 +39,13 @@
                         }
                     </tr>
                 }
-                if (Data.Count() > PageSize)
+                if (Items.Count() > PageSize)
                 {
                     <tr>
                         <td colspan="@Columns.Count">
 
                             <button class="btn btn-outline-info" @onclick="()=>ShowMore(-1)">&laquo;</button>
-                            @for (int i = 1; i <= Data.Count() / PageSize; i++)
+                            @for (int i = 1; i <= Items.Count() / PageSize; i++)
                             {
                                 string clase = "btn-outline-info";
                                 if (i == Page) clase = "btn-info";
@@ -53,7 +53,7 @@
                                 <button class="btn @clase ml-1" @onclick="()=> ShowPage(ii)"> @i </button>
                             }
 
-                            @if (Data.Count() > Page * PageSize)
+                            @if (Items.Count() > Page * PageSize)
                             {
                                 <button class="btn btn-outline-info ml-1" @onclick="()=>ShowMore(+1)">&raquo;</button>
                             }

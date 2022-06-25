@@ -10,53 +10,49 @@ namespace BP.Components.Blazor.UI.Tables
 {
     public partial class TableColumn<TRow> : ComponentBase
     {
-        [CascadingParameter] public Table<TRow> OwnerTable { get; set; }
-        [Parameter] public string Title { get; set; }
-        [Parameter] public Func<TRow,object> Field { get; set; }
-        [Parameter] public string Format { get; set; }
-
-        [CascadingParameter] public Table<TRow> OwnerGrid { get; set; }
-        [Parameter] public Expression<Func<TRow, object>> Expression { get; set; }
-        [Parameter] public Expression<Func<TRow, object>> Prefix { get; set; }
-        [Parameter] public Expression<Func<TRow, object>> Suffix { get; set; }
-        [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
+        [Parameter] public Expression<Func<TRow, object>> Field { get; set; }
+        [Parameter] public Func<TRow, object> Prefix { get; set; }
+        [Parameter] public Func<TRow, object> Suffix { get; set; }
         [Parameter] public bool Sortable { get; set; } = true;
+        [Parameter] public string Title { get; set; }
+        [Parameter] public string Format { get; set; }
+        [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
+        [Parameter] public bool SortFirst { get; set; }
 
-        public event EventHandler<Tuple<Expression<Func<TRow, object>>, bool>> OnChangeOrder;
-        private Func<TRow, object> compiledExpression;
+
+        [CascadingParameter] public Table<TRow> OwnerTable { get; set; }
+
+
+
+
+        internal event EventHandler<Tuple<Expression<Func<TRow, object>>, EOrderColumn>> OnChangeOrder;
+        private Func<TRow, object> compiledField;
         private Expression lastCompiledExpression;
         private RenderFragment headerTemplate;
         private RenderFragment<TRow> cellTemplate;
-        public int order = 0; //0-None, 1-Ascending, 2-Descending
+        internal EOrderColumn order = EOrderColumn.None; //0-None, 1-Ascending, 2-Descending
+        private bool firstSorted = false;
 
-        private Func<TRow, object> compiledExpressionPrefix;
-        private Expression lastCompiledExpressionPrefix;
-        private Func<TRow, object> compiledExpressionSuffix;
-        private Expression lastCompiledExpressionSuffix;
         // Add the column to the parent Grid component.
         // OnInitialized is called only once in the component lifecycle
         protected override void OnInitialized()
         {
-            OwnerGrid.AddColumn(this);
+            OwnerTable.AddColumn(this);
         }
 
         protected override void OnParametersSet()
         {
-            if (lastCompiledExpression != Expression)
+            if (lastCompiledExpression != Field)
             {
-                compiledExpression = Expression?.Compile();
-                lastCompiledExpression = Expression;
+                compiledField = Field?.Compile();
+                lastCompiledExpression = Field;
             }
-            if (lastCompiledExpressionPrefix != Prefix)
+            if (SortFirst && !firstSorted)
             {
-                compiledExpressionPrefix = Prefix?.Compile();
-                lastCompiledExpressionPrefix = Prefix;
+                order = EOrderColumn.Ascending;
+                firstSorted = true;
             }
-            if (lastCompiledExpressionSuffix != Suffix)
-            {
-                compiledExpressionSuffix = Suffix?.Compile();
-                lastCompiledExpressionSuffix = Suffix;
-            }
+
         }
 
         internal RenderFragment HeaderTemplate
@@ -69,9 +65,9 @@ namespace BP.Components.Blazor.UI.Tables
                     {
                         // Use the provided title or infer it from the expression
                         var title = Title;
-                        if (title == null && Expression != null)
+                        if (title == null && Field != null)
                         {
-                            title = GetMemberName(Expression);
+                            title = GetMemberName(Field);
                         }
 
                         builder.OpenElement(0, "th");
@@ -99,20 +95,16 @@ namespace BP.Components.Blazor.UI.Tables
         /// </summary>
         private void PrepareChangeOrder()
         {
-            if (Expression is null) return;
+            if (Field is null) return;
 
-            bool ordering = true;
-            if (order == 0)
-                order = 1;
-            else if (order == 1)
-            {
-                order = 2;
-                ordering = false;
-            }
-            else if (order == 2)
-                order = 1;
+            if (order == EOrderColumn.None)
+                order = EOrderColumn.Ascending;
+            else if (order == EOrderColumn.Ascending)
+                order = EOrderColumn.Descending;
+            else if (order == EOrderColumn.Descending)
+                order = EOrderColumn.Ascending;
 
-            OnChangeOrder?.Invoke(this, new Tuple<Expression<Func<TRow, object>>, bool>(Expression, ordering));
+            OnChangeOrder?.Invoke(this, new Tuple<Expression<Func<TRow, object>>, EOrderColumn>(Field, order));
         }
 
 
@@ -125,19 +117,19 @@ namespace BP.Components.Blazor.UI.Tables
                     cellTemplate = (rowData => builder =>
                     {
                         builder.OpenElement(0, "td");
-                        if (compiledExpression != null)
+                        if (compiledField != null)
                         {
-                            var value = compiledExpression(rowData);
+                            var value = compiledField(rowData);
                             string formattedValue;
                             if (value?.GetType() == typeof(DateTime))
                                 formattedValue = string.IsNullOrEmpty(Format) ? value?.ToString() : ((DateTime)value).ToString(Format);
                             else
                                 formattedValue = string.IsNullOrEmpty(Format) ? value?.ToString() : string.Format("{0:" + Format + "}", value);
 
-                            if (compiledExpressionPrefix is not null)
-                                formattedValue = $"{compiledExpressionPrefix(rowData)} {formattedValue}";
-                            if (compiledExpressionSuffix is not null)
-                                formattedValue = $"{formattedValue} {compiledExpressionSuffix(rowData)}";
+                            if (Prefix is not null)
+                                formattedValue = $"{Prefix(rowData)} {formattedValue}";
+                            if (Suffix is not null)
+                                formattedValue = $"{formattedValue} {Suffix(rowData)}";
                             builder.AddContent(1, formattedValue);
                         }
                         else
@@ -172,9 +164,9 @@ namespace BP.Components.Blazor.UI.Tables
         /// <returns></returns>
         private string GetIconOrderCSS()
         {
-            if (order == 1)
+            if (order == EOrderColumn.Ascending)
                 return "oi oi-caret-top";
-            if (order == 2)
+            if (order == EOrderColumn.Descending)
                 return "oi oi-caret-bottom";
             else
                 return "";

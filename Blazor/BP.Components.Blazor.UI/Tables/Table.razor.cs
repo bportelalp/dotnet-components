@@ -10,7 +10,7 @@ namespace BP.Components.Blazor.UI.Tables
 {
     public partial class Table<TRow> : ComponentBase, IDisposable
     {
-        [Parameter] public IEnumerable<TRow> Data { get; set; }
+        [Parameter] public IEnumerable<TRow> Items { get; set; }
         [Parameter] public string TableCSS { get; set; } = "table table-hover";
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> TableAttributes { get; set; }
@@ -25,18 +25,15 @@ namespace BP.Components.Blazor.UI.Tables
         [Parameter] public bool FixedContent { get; set; } = true;
 
 
-        [Parameter]
-        public int PageSize { get; set; } = 25;
+        [Parameter] public int PageSize { get; set; } = 25;
         public int Page { get; set; } = 1;
 
-        [Parameter]
-        public bool BackToInitialPageOnItemsChange { get; set; } = false;
+        [Parameter] public bool BackToInitialPageOnItemsChange { get; set; } = false;
 
 
         protected int itemsCount = 0;
 
-        [Parameter]
-        public Func<TRow, int, string> RowClass { get; set; }
+        [Parameter] public Func<TRow, int, string> RowClass { get; set; }
 
         protected readonly List<TableColumn<TRow>> Columns = new List<TableColumn<TRow>>();
 
@@ -54,20 +51,18 @@ namespace BP.Components.Blazor.UI.Tables
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void OrderRequested(object sender, Tuple<Expression<Func<TRow, object>>, bool> e)
+        internal void OrderRequested(object sender, Tuple<Expression<Func<TRow, object>>, EOrderColumn> e)
         {
             if (e == null) return;
             foreach (var column in Columns.Where(c => c != sender))
-            {
-                column.order = 0;
-            }
+                column.order = EOrderColumn.None;
 
             // Aplica la expresión a la lista de objetos
             var compiled = e.Item1.Compile();
-            if (e.Item2)
-                Data = Data.OrderBy(c => compiled(c)).ToList();
-            else
-                Data = Data.OrderByDescending(c => compiled(c)).ToList();
+            if (e.Item2 == EOrderColumn.Ascending)
+                Items = Items.OrderBy(c => compiled(c)).ToList();
+            else if (e.Item2 == EOrderColumn.Descending)
+                Items = Items.OrderByDescending(c => compiled(c)).ToList();
 
 
             StateHasChanged();
@@ -81,13 +76,13 @@ namespace BP.Components.Blazor.UI.Tables
             {
                 foreach (var column in Columns)
                 {
-                    if (column.order != 0)
+                    if (column.order != EOrderColumn.None)
                     {
-                        var compiled = column.Expression.Compile();
-                        if (column.order == 1)
-                            Data = Data.OrderBy(c => compiled(c)).ToList();
+                        var compiled = column.Field.Compile();
+                        if (column.order == EOrderColumn.Ascending)
+                            Items = Items.OrderBy(c => compiled(c)).ToList();
                         else
-                            Data = Data.OrderByDescending(c => compiled(c)).ToList();
+                            Items = Items.OrderByDescending(c => compiled(c)).ToList();
                         break;
                     }
                 }
@@ -96,13 +91,25 @@ namespace BP.Components.Blazor.UI.Tables
         }
         protected override void OnAfterRender(bool firstRender)
         {
-            if (BackToInitialPageOnItemsChange && itemsCount != Data.Count())
+            if (BackToInitialPageOnItemsChange && itemsCount != Items.Count())
             {
                 Page = 1;
             }
-            itemsCount = Data.Count();
+            itemsCount = Items.Count();
             if (firstRender)
             {
+                foreach (var column in Columns)
+                {
+                    if (column.order != EOrderColumn.None)
+                    {
+                        var compiled = column.Field.Compile();
+                        if (column.order == EOrderColumn.Ascending)
+                            Items = Items.OrderBy(c => compiled(c)).ToList();
+                        else
+                            Items = Items.OrderByDescending(c => compiled(c)).ToList();
+                        break;
+                    }
+                }
                 StateHasChanged();
             }
         }
@@ -138,7 +145,5 @@ namespace BP.Components.Blazor.UI.Tables
                 col.OnChangeOrder -= OrderRequested;
             }
         }
-
-
     }
 }
