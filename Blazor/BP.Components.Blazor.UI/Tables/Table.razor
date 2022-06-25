@@ -39,9 +39,16 @@
                     <tr @key="item.GetHashCode()" class="@(RowClass?.Invoke(item, index++))" @onclick="() => OnRowClick.InvokeAsync(item)">
                         @if (RowCollapsible is not null)
                         {
-                            <td>
-                                <button class="btn btn-outline-primary" @onclick="() => ExpandRow(item.GetHashCode())"><span class="oi oi-plus"></span></button>
-                            </td>
+                            @if (RowCollapsible.Expandable(item))
+                            {
+                                <td>
+                                    <div class="btn badge rounded-pill text-bg-light" @onclick="() => ExpandRow(item.GetHashCode())"><span class="oi oi-plus"></span></div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
 
                         }
                         @foreach (var column in Columns)

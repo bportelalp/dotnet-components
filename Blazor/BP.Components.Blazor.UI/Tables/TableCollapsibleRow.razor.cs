@@ -10,6 +10,7 @@ namespace BP.Components.Blazor.UI.Tables
     public partial class TableCollapsibleRow<TRow>
     {
         [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
+        [Parameter] public Func<TRow, bool> Expandable { get; set; }
 
         [CascadingParameter] public Table<TRow> OwnerTable { get; set; }
         protected override void OnInitialized()
@@ -25,7 +26,7 @@ namespace BP.Components.Blazor.UI.Tables
                 {
                     row = (rowData => builder =>
                     {
-                        if(rowData is null)
+                        if(rowData is null || !Expandable(rowData))
                         {
                             row = null;
                             return;
@@ -33,7 +34,13 @@ namespace BP.Components.Blazor.UI.Tables
                         builder.OpenElement(0, "tr");
                         builder.OpenElement(1, "td");
                         builder.AddAttribute(1, "colspan", "100%");
-                        builder.AddContent(1, ChildContent, rowData);
+                        builder.OpenElement(2, "div");
+                        builder.AddAttribute(2, "class", "d-flex justify-content-center flex-fill");
+                        builder.OpenElement(3, "div");
+                        builder.AddAttribute(3, "style", "width: 95%");
+                        builder.AddContent(3, ChildContent, rowData);
+                        builder.CloseComponent();
+                        builder.CloseComponent();
                         builder.CloseComponent();
                         builder.CloseComponent();
                     });
