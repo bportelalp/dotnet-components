@@ -17,6 +17,10 @@
 <table @attributes="@TableAttributes" class="@TableClass">
     <thead class="@HeaderClass">
         <tr>
+            @if (RowCollapsible is not null)
+            {
+                <th>Abrir</th>
+            }
             @foreach (var column in Columns)
             {
                 @column.HeaderTemplate
@@ -27,17 +31,32 @@
         @{
             if (Items != null)
             {
-               
+
                 var index = 0;
                 foreach (var item in Items.Skip((Page - 1) * PageSize).Take(PageSize))
                 {
                     @* Use @key to help the diff algorithm when updating the collection *@
                     <tr @key="item.GetHashCode()" class="@(RowClass?.Invoke(item, index++))" @onclick="() => OnRowClick.InvokeAsync(item)">
+                        @if (RowCollapsible is not null)
+                        {
+                            <td>
+                                <button class="btn btn-outline-primary" @onclick="() => ExpandRow(item.GetHashCode())"><span class="oi oi-plus"></span></button>
+                            </td>
+
+                        }
                         @foreach (var column in Columns)
                         {
                             @column.CellTemplate(item)
                         }
                     </tr>
+                    @if (RowCollapsible is not null)
+                    {
+                        @if (ExpandedRows.Contains(item.GetHashCode()))
+                        {
+                            @RowCollapsible.Row(item)
+                        }
+                    }
+
                 }
                 if (Items.Count() > PageSize)
                 {
@@ -61,15 +80,15 @@
                     </tr>
                 }
                 @*if (Items.Count > Page * PageSize)
-                    {
-                    <tr>
-                    <td colspan="@columns.Count">
-                    <button class="btn btn-info" @onclick="()=>ShowMore(-1)">&laquo;</button>
-                    <button class="btn btn-info"> @Page </button>
-                    <button class="btn btn-info" @onclick="()=>ShowMore(+1)">&raquo;</button>
-                    </td>
-                    </tr>
-                    }*@
+        {
+        <tr>
+        <td colspan="@columns.Count">
+        <button class="btn btn-info" @onclick="()=>ShowMore(-1)">&laquo;</button>
+        <button class="btn btn-info"> @Page </button>
+        <button class="btn btn-info" @onclick="()=>ShowMore(+1)">&raquo;</button>
+        </td>
+        </tr>
+        }*@
             }
         }
     </tbody>

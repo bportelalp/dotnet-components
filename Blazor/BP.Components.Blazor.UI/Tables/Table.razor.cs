@@ -23,19 +23,18 @@ namespace BP.Components.Blazor.UI.Tables
         /// Parametro de optimización. determina si las columnas son dinámicas en sucesivas renderizaciones para tener que regenerarlas
         /// </summary>
         [Parameter] public bool FixedContent { get; set; } = true;
-
-
         [Parameter] public int PageSize { get; set; } = 25;
-        public int Page { get; set; } = 1;
-
+        [Parameter] public Func<TRow, int, string> RowClass { get; set; }
         [Parameter] public bool BackToInitialPageOnItemsChange { get; set; } = false;
 
-
+        public int Page { get; set; } = 1;
         protected int itemsCount = 0;
 
-        [Parameter] public Func<TRow, int, string> RowClass { get; set; }
+
 
         protected readonly List<TableColumn<TRow>> Columns = new List<TableColumn<TRow>>();
+        protected TableCollapsibleRow<TRow> RowCollapsible = null;
+        protected List<int> ExpandedRows = new List<int>();
 
         // GridColumn uses this method to add a column
         internal void AddColumn(TableColumn<TRow> column)
@@ -43,6 +42,20 @@ namespace BP.Components.Blazor.UI.Tables
             Columns.Add(column);
             if (column.Sortable)
                 column.OnChangeOrder += OrderRequested;
+        }
+
+        internal void AddCollapsibleRow(TableCollapsibleRow<TRow> row)
+        {
+            RowCollapsible = row;
+        }
+
+        internal void ExpandRow(int itemHash)
+        {
+            if(ExpandedRows.Contains(itemHash))
+                ExpandedRows.Remove(itemHash);
+            else
+                ExpandedRows.Add(itemHash);
+            StateHasChanged();
         }
 
         /// <summary>
