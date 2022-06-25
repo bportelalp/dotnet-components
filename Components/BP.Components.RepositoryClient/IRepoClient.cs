@@ -11,7 +11,7 @@ namespace BP.Components.RepositoryClient
         Task<RepoResponse<TResult>> GetAsync<TResult>(string route);
         Task<RepoResponse<TResult>> PostAsync<T, TResult>(string route, T body);
         Task<RepoResponse<object>> PostAsync<T>(string route, T body);
-        Task<RepoResponse<object>> Put<T>(string route, T body);
+        Task<RepoResponse<object>> PutAsync<T>(string route, T body);
         string BuildQuery(string route, params object[] args);
 
     }

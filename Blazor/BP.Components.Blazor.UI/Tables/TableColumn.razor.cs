@@ -117,7 +117,7 @@ namespace BP.Components.Blazor.UI.Tables
                     cellTemplate = (rowData => builder =>
                     {
                         builder.OpenElement(0, "td");
-                        if (compiledField != null)
+                        if (ChildContent == null)
                         {
                             var value = compiledField(rowData);
                             string formattedValue;
