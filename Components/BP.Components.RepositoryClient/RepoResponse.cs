@@ -2,6 +2,10 @@
 {
     public class RepoResponse<T>
     {
+        public RepoResponse()
+        {
+
+        }
         public RepoResponse(T response, bool success, HttpResponseMessage httpResponseMessage)
         {
             Success = success;
