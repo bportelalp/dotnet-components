@@ -11,11 +11,11 @@ namespace BP.Components.Blazor.UI.FrontendUtils
     /// Incluir librería 
     ///<script src = "https://cdn.jsdelivr.net/npm/sweetalert2@8" ></ script >
     /// </summary>
-    public class PopUp
+    public class NotificationService
     {
         private readonly IJSRuntime js;
 
-        public PopUp(IJSRuntime js)
+        public NotificationService(IJSRuntime js)
         {
             this.js = js;
         }

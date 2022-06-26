@@ -14,7 +14,7 @@ namespace BP.Components.Blazor.UI
         {
             services.AddScoped<DomAccessService>();
             services.AddScoped<LocalStorageService>();
-            services.AddScoped<PopUp>();
+            services.AddScoped<NotificationService>();
         }
     }
 }
