@@ -48,7 +48,7 @@ namespace BP.Components.RepositoryClient
             return new RepoResponse<object>(null, response.IsSuccessStatusCode, response);
         }
 
-        public async Task<RepoResponse<object>> Put<T>(string route, T body)
+        public async Task<RepoResponse<object>> PutAsync<T>(string route, T body)
         {
             var content = new StringContent(JsonConvert.SerializeObject(body));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
