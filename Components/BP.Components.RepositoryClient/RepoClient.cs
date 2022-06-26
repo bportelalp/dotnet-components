@@ -48,12 +48,42 @@ namespace BP.Components.RepositoryClient
             return new RepoResponse<object>(null, response.IsSuccessStatusCode, response);
         }
 
-        public async Task<RepoResponse<object>> Put<T>(string route, T body)
+        public async Task<RepoResponse<TResult>> PutAsync<T, TResult>(string route, T body)
         {
             var content = new StringContent(JsonConvert.SerializeObject(body));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var response = await httpClient.PutAsync(route, content);
+            TResult result = default(TResult);
+
+            if (response.IsSuccessStatusCode)
+                result = await response.Content.ReadFromJsonAsync<TResult>();
+
+            return new RepoResponse<TResult>(result, response.IsSuccessStatusCode, response);
+        }
+
+        public async Task<RepoResponse<object>> PutAsync<T>(string route, T body)
+        {
+            var content = new StringContent(JsonConvert.SerializeObject(body));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var response = await httpClient.PutAsync(route, content);
+            return new RepoResponse<object>(null, response.IsSuccessStatusCode, response);
+        }
+
+        public async Task<RepoResponse<object>> DeleteAsync<T>(string route, T body)
+        {
+            var content = new StringContent(JsonConvert.SerializeObject(body));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(httpClient.BaseAddress,route),
+                Content = content
+            };
+            var response = await httpClient.SendAsync(request);
+
             return new RepoResponse<object>(null, response.IsSuccessStatusCode, response);
         }
 
