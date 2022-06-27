@@ -1,0 +1,18 @@
+﻿.rounded__button {
+    border-radius: 50%
+}
+
+.btn__clear { /*Put before btn-outline-danger for preserve bootstrap behaviour and hide border-rigt line on x button previous*/
+    border-radius: .5em;
+    border: 1px solid #007ec7;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -4px;
+    font-weight: bold;
+    background-color: white;
+}
+
+    .btn__clear:hover { /*To the same than previous, on hover*/
+        color: white;
+        background-color: #dc3545;
+    }
