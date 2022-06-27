@@ -58,6 +58,12 @@ namespace BP.Components.Blazor.UI.Tables
             StateHasChanged();
         }
 
+        internal string ExpandRowCSS(int itemHash)
+        {
+            if (ExpandedRows.Contains(itemHash)) return "oi oi-minus";
+            else return "oi oi-plus";
+        }
+
         /// <summary>
         /// Método invocado cuando se produce una solicitud de orden desde los hijos. Se resetean las 
         /// ordenaciones de columnas no implicadas y se aplica a la lista de Items.
