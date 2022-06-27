@@ -5,16 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BP.Components.Blazor.ChartJS
+namespace BP.Components.Blazor.ChartJS.Interop
 {
-    public class ChartJSInterop
+    public class ChartJSService
     {
         private readonly IJSRuntime js;
         private Lazy<Task<IJSObjectReference>> moduleTask;
-        private string srcChartJS = "";
+        private string srcChartJS = "./_content/BP.Components.Blazor.ChartJS/js/js-packages/chart3.8.min.js";
         private string srcInterop = "./_content/BP.Components.Blazor.ChartJS/js/ChartJSInterop.js";
 
-        public ChartJSInterop(IJSRuntime js)
+        public ChartJSService(IJSRuntime js)
         {
             this.js = js;
             moduleTask = new Lazy<Task<IJSObjectReference>>(async () =>
