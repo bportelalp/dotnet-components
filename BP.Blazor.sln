@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BP.Components.Blazor.UI", "Blazor\BP.Components.Blazor.UI\BP.Components.Blazor.UI.csproj", "{E30F0000-F715-4AA2-A9BE-EE782916AF6B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BP.Components.Blazor.ChartJS", "Blazor\BP.Components.Blazor.ChartJS\BP.Components.Blazor.ChartJS.csproj", "{2DCC5FB9-215A-401F-9171-B605FDCCBD0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +19,17 @@ Global
 		{E30F0000-F715-4AA2-A9BE-EE782916AF6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E30F0000-F715-4AA2-A9BE-EE782916AF6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E30F0000-F715-4AA2-A9BE-EE782916AF6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DCC5FB9-215A-401F-9171-B605FDCCBD0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DCC5FB9-215A-401F-9171-B605FDCCBD0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DCC5FB9-215A-401F-9171-B605FDCCBD0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DCC5FB9-215A-401F-9171-B605FDCCBD0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E30F0000-F715-4AA2-A9BE-EE782916AF6B} = {FED5B3C2-F478-4600-B3B2-F235003297E5}
+		{2DCC5FB9-215A-401F-9171-B605FDCCBD0F} = {FED5B3C2-F478-4600-B3B2-F235003297E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD8231FD-AD05-4D1E-A348-77C44492D50D}
