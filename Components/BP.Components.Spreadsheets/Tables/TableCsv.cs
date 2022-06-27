@@ -49,16 +49,25 @@ namespace BP.Components.Spreadsheets.Tables
                 }
             }
         }
+
+
         /// <summary>
         /// Create Csv file as MemoryStream
         /// </summary>
         /// <returns></returns>
-        public override MemoryStream Create()
+        public override MemoryStream Create() => Create(Encoding.Latin1);
+
+        /// <summary>
+        /// Create csv file as MemoryStream with the specific encoding
+        /// </summary>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public MemoryStream Create(Encoding encoding)
         {
             var lines = this.CreateLines(CsvSeparator.GetSeparator());
 
             MemoryStream ms = new MemoryStream();
-            StreamWriter sw = new StreamWriter(ms);
+            StreamWriter sw = new StreamWriter(ms, encoding);
             foreach (var line in lines)
             {
                 sw.WriteLine(line);
@@ -97,7 +106,9 @@ namespace BP.Components.Spreadsheets.Tables
             {
                 inputLine += column.Title + separator;
             }
+            inputLine = inputLine.Trim(separator.ToCharArray()[0]);
             lines.Add(inputLine);
+
 
             //Copy items
             foreach (var item in Items)
@@ -107,6 +118,7 @@ namespace BP.Components.Spreadsheets.Tables
                 {
                     inputLine += column.Evaluate(item) + separator;
                 }
+                inputLine = inputLine.Trim(separator.ToCharArray()[0]);
                 lines.Add(inputLine);
             }
             return lines;
