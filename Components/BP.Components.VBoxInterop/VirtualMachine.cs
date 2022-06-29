@@ -13,7 +13,7 @@ namespace BP.Components.VBoxInterop
     {
         public string Name { get; set; }
         public EVMState State { get; set; }
-        public Dictionary<string,string> MachineInfo { get; set; }
+        public Dictionary<string, string> MachineInfo { get; set; }
         public event EventHandler<LogEventArgs> Output;
 
         public VirtualMachine(string name)
@@ -22,11 +22,11 @@ namespace BP.Components.VBoxInterop
         }
 
         private CmdInterop cmd;
-        private CmdInterop Cmd { get { if (cmd is null) cmd = new CmdInterop(); cmd.DataReceived += NotifyNewLogEvent; return cmd; } }
+        private CmdInterop Cmd { get { if (cmd is null) { cmd = new CmdInterop(); cmd.DataReceived += NotifyNewLogEvent; } return cmd; } }
 
-        private void GetMachineInfo()
+        private async Task GetMachineInfo()
         {
-            var lines = Cmd.RunCommand(VirtualBoxCmd.CMD_INFO_VM(this.Name));
+            var lines = await Cmd.RunCommandAsync(VirtualBoxCmd.CMD_INFO_VM(this.Name));
             MachineInfo = new Dictionary<string, string>();
             foreach (var line in lines)
             {
@@ -40,15 +40,19 @@ namespace BP.Components.VBoxInterop
             }
         }
 
-        public Task StartVM()
+        public async Task StartVM()
         {
-            var cmd = VirtualBoxCmd.CMD_START_HEADLESS(Name);
-            return new Task(() => { });
+            await Cmd.RunCommandAsync(VirtualBoxCmd.CMD_START_HEADLESS(Name));
         }
 
-        public string GetState()
+        public async Task SaveVM()
         {
-            this.GetMachineInfo();
+            await Cmd.RunCommandAsync(VirtualBoxCmd.CMD_SAVE_STATE(Name));
+        }
+
+        public async Task<string> GetState()
+        {
+            await this.GetMachineInfo();
             return MachineInfo["VMState"];
         }
 

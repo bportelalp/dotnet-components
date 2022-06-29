@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BP.Components.VBoxInterop.Cmd
 {
-    public class CmdInterop
+    public class CmdInterop : IDisposable
     {
         public event DataReceivedEventHandler DataReceived;
         private List<string> output;
@@ -20,14 +20,14 @@ namespace BP.Components.VBoxInterop.Cmd
             return result;
         }
 
-        public List<string> RunCommand(string args)
+        public async Task<List<string>> RunCommandAsync(string args)
         {
             var proc = this.InitializeProcess(args);
             proc.Start();
             proc.BeginOutputReadLine();
-            proc.WaitForExit();
-            //var result = proc.StandardOutput.ReadToEnd();
+            await proc.WaitForExitAsync();
             proc.Close();
+            proc.OutputDataReceived -= null;
             var result = output;
             return result;
         }
@@ -40,13 +40,23 @@ namespace BP.Components.VBoxInterop.Cmd
             proc.StartInfo.Arguments = arguments;
             proc.StartInfo.CreateNoWindow = true;
             proc.StartInfo.RedirectStandardOutput = true;
-            proc.OutputDataReceived += new DataReceivedEventHandler((o,e) =>
+            proc.Exited += new EventHandler((o, e) =>
             {
-                DataReceived?.Invoke(o, e);
-                if(!string.IsNullOrWhiteSpace(e.Data))
+
+            });
+            proc.OutputDataReceived += new DataReceivedEventHandler((o, e) =>
+            {
+                if (!string.IsNullOrWhiteSpace(e.Data))
+                {
+                    DataReceived?.Invoke(o, e);
                     output.Add(e.Data);
+                }
             });
             return proc;
+        }
+
+        public void Dispose()
+        {
         }
     }
 }
