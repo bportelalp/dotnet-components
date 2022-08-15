@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32804.467
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.Test.Maui.BlazorHybrid.Components", "BP.Test.Maui.BlazorHybrid.Components\BP.Test.Maui.BlazorHybrid.Components.csproj", "{E48986D9-339E-415A-9E23-778DCDEF096C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.Test.Maui.BlazorHybrid.App", "BP.Test.Maui.BlazorHybrid.App\BP.Test.Maui.BlazorHybrid.App.csproj", "{17FF4C17-F257-4244-A7B5-064071632DFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E48986D9-339E-415A-9E23-778DCDEF096C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E48986D9-339E-415A-9E23-778DCDEF096C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E48986D9-339E-415A-9E23-778DCDEF096C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E48986D9-339E-415A-9E23-778DCDEF096C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17FF4C17-F257-4244-A7B5-064071632DFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17FF4C17-F257-4244-A7B5-064071632DFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17FF4C17-F257-4244-A7B5-064071632DFD}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{17FF4C17-F257-4244-A7B5-064071632DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17FF4C17-F257-4244-A7B5-064071632DFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17FF4C17-F257-4244-A7B5-064071632DFD}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6050E23E-5AE7-49BC-9057-A8261A3DE4BE}
+	EndGlobalSection
+EndGlobal
