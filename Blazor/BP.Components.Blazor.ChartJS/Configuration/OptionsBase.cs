@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BP.Components.Blazor.ChartJS.Config
+namespace BP.Components.Blazor.ChartJS.Configuration
 {
-    public class BarConfig
+    public class OptionsBase
     {
-
     }
 }
