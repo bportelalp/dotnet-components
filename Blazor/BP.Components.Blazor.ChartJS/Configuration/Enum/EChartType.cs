@@ -10,6 +10,8 @@ namespace BP.Components.Blazor.ChartJS.Configuration.Enum
     {
         bar = 0,
         line = 1,
-        doughnut = 2
+        doughnut = 2,
+        scatter = 3,
+        bubble = 4
     }
 }
