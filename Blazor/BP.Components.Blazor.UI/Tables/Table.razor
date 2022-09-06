@@ -42,7 +42,9 @@
                             @if (RowCollapsible.Expandable(item))
                             {
                                 <td>
-                                    <div class="btn badge rounded-pill text-bg-light" @onclick="() => ExpandRow(item.GetHashCode())"><span class="oi oi-plus"></span></div>
+                                    <div class="btn badge rounded-pill text-bg-light" @onclick="() => ExpandRow(item.GetHashCode())">
+                                        <span class="@ExpandRowCSS(item.GetHashCode())"></span>
+                                    </div>
                                 </td>
                             }
                             else
