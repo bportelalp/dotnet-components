@@ -1,5 +1,5 @@
 ﻿using BP.Components.Spreadsheets.Tables;
-using BP.Test.SpreadSheets.Console;
+using BP.Samples.SpreadSheets.Console;
 
 Console.WriteLine("Hello, World!");
 

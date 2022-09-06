@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "BP.Test.BlazorWebAssembly": {
+    "BP.Samples.BlazorWebAssembly": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

@@ -1,0 +1,9 @@
+{
+  "solution": {
+    "path": "BP.Dotnet-Components.sln",
+    "projects": [
+      "Components\\BP.Components.Spreadsheets\\BP.Components.Spreadsheets.csproj",
+      "Samples\\BP.Samples.Spreadsheets.Console\\BP.Samples.Spreadsheets.Console.csproj"
+    ]
+  }
+}

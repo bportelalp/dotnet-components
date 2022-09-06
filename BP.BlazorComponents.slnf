@@ -1,0 +1,10 @@
+{
+  "solution": {
+    "path": "BP.Dotnet-Components.sln",
+    "projects": [
+      "Blazor\\BP.Components.Blazor.ChartJS\\BP.Components.Blazor.ChartJS.csproj",
+      "Blazor\\BP.Components.Blazor.UI\\BP.Components.Blazor.UI.csproj",
+      "Samples\\BP.Samples.BlazorWebAssembly\\BP.Samples.BlazorWebAssembly.csproj"
+    ]
+  }
+}

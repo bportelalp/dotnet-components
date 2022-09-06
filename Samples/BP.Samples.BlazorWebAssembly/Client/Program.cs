@@ -1,8 +1,8 @@
-using BP.Test.BlazorWebAssembly;
+using BP.Samples.BlazorWebAssembly;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-namespace BP.Test.BlazorWebAssembly
+namespace BP.Samples.BlazorWebAssembly
 {
     public class Program
     {

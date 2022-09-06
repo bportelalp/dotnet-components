@@ -2,7 +2,7 @@
 using BP.Components.VBoxInterop.Cmd;
 using BP.Components.VBoxInterop.Common;
 
-namespace BP.Test.VBoxInterop.Console
+namespace BP.Samples.VBoxInterop.Console
 {
     internal class Program
     {
