@@ -1,3 +1,4 @@
+using BP.Components.Blazor.UI.Toast;
 using BP.Samples.BlazorWebAssembly;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -13,6 +14,7 @@ namespace BP.Samples.BlazorWebAssembly
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped<ToastService>();
 
             await builder.Build().RunAsync();
         }

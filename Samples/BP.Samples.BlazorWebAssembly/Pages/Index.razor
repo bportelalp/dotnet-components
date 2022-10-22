@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using BP.Components.Blazor.ChartJS.Datasets
+@using BP.Components.Blazor.UI.Toast
 
 <PageTitle>Index</PageTitle>
 
@@ -7,12 +8,22 @@
 
 Welcome to your new app.
 
+<BP.Components.Blazor.UI.Toast.Toast/>
+
+<button type="button" class="btn btn-primary" id="liveToastBtn" @onclick="Show">Show live toast</button>
+
+
 <SurveyPrompt Title="How is Blazor working for you?" />
 
 @code {
+    [Inject] ToastService Toast { get; set; }
     protected override void OnParametersSet()
     {
         var dataset = new LineDataset<int?>();
         base.OnParametersSet();
+    }
+
+    private void Show(){
+        Toast.ShowToast();
     }
 }
