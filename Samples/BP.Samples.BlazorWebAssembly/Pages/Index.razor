@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using BP.Components.Blazor.UI.Modal
 @using BP.Components.Blazor.UI.Notification
 
 <PageTitle>Index</PageTitle>
@@ -8,20 +9,47 @@
 Welcome to your new app.
 
 <BP.Components.Blazor.UI.Notification.Toast />
+<p>
+    Toasts
+</p>
+<div>
+    <button type="button" class="btn btn-primary" id="" @onclick="@(() => Toast.ShowInformation("Toast"))">Info</button>
+    <button type="button" class="btn btn-success" id="" @onclick="@(() => Toast.ShowSuccess("Toast"))">Success</button>
+    <button type="button" class="btn btn-warning" id="" @onclick="@(() => Toast.ShowWarning("Toast"))">Warning</button>
+    <button type="button" class="btn btn-danger" id="" @onclick="@(() => Toast.ShowError("Toast"))">Error</button>
+    <button type="button" class="btn btn-danger" id="" @onclick="Dialog">Dialog</button>
+</div>
+<p>
+    Modales
+</p>
+<div>
 
+    <button type="button" class="btn btn-danger" id="" @onclick="() => modal1.OpenModal()">Abrir modal 1</button>
+    <button type="button" class="btn btn-danger" id="" @onclick="() => modal2.OpenModal()">Abrir modal 2</button>
+</div>
 
-<button type="button" class="btn btn-primary" id="" @onclick="@(() => Toast.ShowInformation("Toast"))">Info</button>
-<button type="button" class="btn btn-success" id="" @onclick="@(() => Toast.ShowSuccess("Toast"))">Success</button>
-<button type="button" class="btn btn-warning" id="" @onclick="@(() => Toast.ShowWarning("Toast"))">Warning</button>
-<button type="button" class="btn btn-danger" id="" @onclick="@(() => Toast.ShowError("Toast"))">Error</button>
-<button type="button" class="btn btn-danger" id="" @onclick="Dialog">Dialog</button>
-
-
+<BP.Components.Blazor.UI.Modal.ModalWindow @ref="modal1">
+    <ModalHeader>
+        <h6>Título 1</h6>
+    </ModalHeader>
+</BP.Components.Blazor.UI.Modal.ModalWindow>
+<BP.Components.Blazor.UI.Modal.ModalWindow @ref="modal2" Options="Options2"/>
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
 @code {
     [Inject] ToastService Toast { get; set; }
+
+    private Components.Blazor.UI.Modal.ModalWindow? modal1;
+    private Components.Blazor.UI.Modal.ModalWindow? modal2;
+    private ModalOptions Options1 = new ModalOptions();
+    private ModalOptions Options2 = new ModalOptions(){
+        Animated = false,
+        Width = ModalWidth.ExtraLarge,
+        VerticallyCentered = true,
+        AcceptButton = "aceptar",
+        DismissButton = "Cancelar"
+    };
 
     protected override void OnParametersSet()
     {

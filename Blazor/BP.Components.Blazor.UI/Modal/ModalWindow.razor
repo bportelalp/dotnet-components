@@ -1,0 +1,33 @@
+﻿@if (Options.RenderBeforeOpen || (!Options.RenderBeforeOpen && rendered))
+{
+    <div class="modal @animatedCss" tabindex="-1" id="@ModalId">
+        <div class="modal-dialog @sizeCss @centeredCss @scrollableCss">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @ModalHeader
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => OnClose.InvokeAsync(false)"></button>
+                </div>
+                <div class="modal-body">
+                    @ModalBody
+                </div>
+                <div class="modal-footer">
+                    @if (ModalFooter is null)
+                    {
+                        @if (Options.AcceptButton is not null)
+                        {
+                            <button type="button" class="btn btn-primary" @onclick="() => OnAccept.InvokeAsync()">@Options.AcceptButton</button>
+                        }
+                        @if (Options.DismissButton is not null)
+                        {
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @onclick="() => OnClose.InvokeAsync(true)">Close</button>
+                        }
+                    }
+                    else
+                    {
+                        @ModalFooter
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
