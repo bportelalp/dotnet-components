@@ -1,0 +1,19 @@
+﻿@if (options.Stacking)
+{
+
+    <div class="toast-container position-fixed @options.Position.GetBootstrapClass() p-3">
+        @foreach (var message in toasts)
+        {
+            <ToastTemplate Message="message" />
+        }
+    </div>
+}
+else
+{
+    @foreach (var message in toasts)
+    {
+        <div class="toast-container position-fixed @options.Position.GetBootstrapClass() p-3">
+            <ToastTemplate Message="message" />
+        </div>
+    }
+}

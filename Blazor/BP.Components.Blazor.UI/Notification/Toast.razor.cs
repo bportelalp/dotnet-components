@@ -6,18 +6,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BP.Components.Blazor.UI.Toast
+namespace BP.Components.Blazor.UI.Notification
 {
-    public partial class Toast : ComponentBase
+    public partial class Toast : ComponentBase, IDisposable
     {
         [Inject] IJSRuntime JS { get; set; }
         [Inject] ToastService ToastService { get; set; }
 
 
-        private List<ToastEventArgs> Toasts = new List<ToastEventArgs>();
 
         private IJSObjectReference module;
         private DotNetObjectReference<Toast> thisReference;
+        private ToastOptions options;
+
+        private readonly List<ToastMessage> toasts = new List<ToastMessage>();
 
         protected override void OnInitialized()
         {
@@ -28,6 +30,7 @@ namespace BP.Components.Blazor.UI.Toast
         protected override void OnParametersSet()
         {
             ToastService.OnShowToast += OnShowToast;
+            options = ToastService.GetOptions();
             base.OnParametersSet();
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -41,20 +44,27 @@ namespace BP.Components.Blazor.UI.Toast
         }
         private async void OnShowToast(object sender, ToastEventArgs e)
         {
-            Toasts.Add(e);
+            toasts.Add(e.Message);
             StateHasChanged();
             await Task.Delay(100);
-            await module.InvokeVoidAsync("showToast", e.ToastId, thisReference);
+
+            var opt = new
+            {
+                delay = e.Delay
+            };
+            await module.InvokeVoidAsync("showToast", e.ToastId, thisReference, opt);
         }
-
-
-
 
         [JSInvokable]
         public void OnHide(string toastId)
         {
-            var toast = Toasts.FirstOrDefault(t => t.ToastId == toastId);
-            Toasts.Remove(toast);
+            var toast = toasts.FirstOrDefault(t => t.ToastId == toastId);
+            toasts.Remove(toast);
+        }
+
+        public void Dispose()
+        {
+            ToastService.OnShowToast -= OnShowToast;
         }
     }
 }

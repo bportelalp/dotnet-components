@@ -1,6 +1,5 @@
 ﻿@page "/"
-@using BP.Components.Blazor.ChartJS.Datasets
-@using BP.Components.Blazor.UI.Toast
+@using BP.Components.Blazor.UI.Notification
 
 <PageTitle>Index</PageTitle>
 
@@ -8,22 +7,33 @@
 
 Welcome to your new app.
 
-<BP.Components.Blazor.UI.Toast.Toast/>
+<BP.Components.Blazor.UI.Notification.Toast />
 
-<button type="button" class="btn btn-primary" id="liveToastBtn" @onclick="Show">Show live toast</button>
+
+<button type="button" class="btn btn-primary" id="" @onclick="@(() => Toast.ShowInformation("Toast"))">Info</button>
+<button type="button" class="btn btn-success" id="" @onclick="@(() => Toast.ShowSuccess("Toast"))">Success</button>
+<button type="button" class="btn btn-warning" id="" @onclick="@(() => Toast.ShowWarning("Toast"))">Warning</button>
+<button type="button" class="btn btn-danger" id="" @onclick="@(() => Toast.ShowError("Toast"))">Error</button>
+<button type="button" class="btn btn-danger" id="" @onclick="Dialog">Dialog</button>
+
 
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
 @code {
     [Inject] ToastService Toast { get; set; }
+
     protected override void OnParametersSet()
     {
-        var dataset = new LineDataset<int?>();
         base.OnParametersSet();
     }
 
-    private void Show(){
-        Toast.ShowToast();
+    private async void Dialog()
+    {
+        var resul = Toast.ShowConfirm("aa", "texto", "si", "no", (b) => 
+        {
+
+        });
     }
+
 }

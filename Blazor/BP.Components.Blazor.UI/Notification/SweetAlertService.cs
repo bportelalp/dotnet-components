@@ -5,21 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BP.Components.Blazor.UI.FrontendUtils
+namespace BP.Components.Blazor.UI.Notification
 {
-    /// <summary>
-    /// Incluir librería 
-    ///<script src = "https://cdn.jsdelivr.net/npm/sweetalert2@11.4.18/dist/sweetalert2.all.min.js" ></ script >
-    ///
-    /// </summary>
-    public class NotificationService
+    public class SweetAlertService
     {
         private readonly IJSRuntime js;
 
         private IJSObjectReference module;
         private readonly Lazy<Task<IJSObjectReference>> moduleTask;
 
-        public NotificationService(IJSRuntime js)
+        public SweetAlertService(IJSRuntime js)
         {
             this.js = js;
             moduleTask = new(() =>
