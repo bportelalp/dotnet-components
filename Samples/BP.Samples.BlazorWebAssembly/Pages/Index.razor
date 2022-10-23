@@ -40,8 +40,8 @@ Welcome to your new app.
 @code {
     [Inject] ToastService Toast { get; set; }
 
-    private Components.Blazor.UI.Modal.ModalWindow? modal1;
-    private Components.Blazor.UI.Modal.ModalWindow? modal2;
+    private Components.Blazor.UI.Modal.ModalWindow modal1;
+    private Components.Blazor.UI.Modal.ModalWindow modal2;
     private ModalOptions Options1 = new ModalOptions();
     private ModalOptions Options2 = new ModalOptions(){
         Animated = false,
@@ -56,7 +56,7 @@ Welcome to your new app.
         base.OnParametersSet();
     }
 
-    private async void Dialog()
+    private void Dialog()
     {
         var resul = Toast.ShowConfirm("aa", "texto", "si", "no", (b) => 
         {

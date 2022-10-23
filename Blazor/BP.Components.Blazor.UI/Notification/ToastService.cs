@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace BP.Components.Blazor.UI.Notification
 {
-    public class ToastService : INotification
+    public class ToastService : INotification, INotificationPrompt
     {
         private readonly IStringLocalizer<Toast> locale;
         private readonly ToastOptions options;
@@ -52,16 +52,28 @@ namespace BP.Components.Blazor.UI.Notification
         public void ShowError(string title, string text) => Show(title, text, NotificationLevel.Error);
         public void ShowError(string title, string text, int duration) => Show(title, text, NotificationLevel.Error, duration);
 
-        public Task<bool> ShowConfirm(string title, string message, string acceptText, string denyText, Action<bool> whenResponse)
+        public void ShowConfirm(string title, string message, Action<bool> resultAction)
+            => ShowConfirm(title, message, locale["Accept"], locale["Cancel"], resultAction);
+        public void ShowConfirm(string title, string message, string acceptButton, string cancelButton, Action<bool> resultAction)
         {
-            ToastEventArgs args = new ToastEventArgs(title,message,NotificationLevel.Information, options.Duration);
-            args.Message.Dialog = new ToastMessagePrompt(acceptText, denyText, false);
+            ToastEventArgs args = new ToastEventArgs(title, message, NotificationLevel.Information, options.Duration);
+            args.Message.Dialog = new ToastMessagePrompt(acceptButton, cancelButton, false);
+            args.Message.Dialog.ActionConfirmation = resultAction;
+
             OnShowToast.Invoke(this, args);
-            args.Message.Dialog.ActionConfirmation = whenResponse;
-            return Task.FromResult(true);
+        }
+
+        public void ShowPrompt(string title, string message, Action<string> resultAction)
+            => ShowPrompt(title, message, locale["Accept"], locale["Cancel"], resultAction);
+        public void ShowPrompt(string title, string message, string acceptButton, string cancelButton, Action<string> resultAction)
+        {
+            ToastEventArgs args = new ToastEventArgs(title, message, NotificationLevel.Information, options.Duration);
+            args.Message.Dialog = new ToastMessagePrompt(acceptButton, cancelButton, true);
+            args.Message.Dialog.ActionPrompt = resultAction;
+
+            OnShowToast.Invoke(this, args);
         }
 
         internal ToastOptions GetOptions() => options;
-
     }
 }

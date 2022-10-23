@@ -129,4 +129,10 @@
   <data name="Info" xml:space="preserve">
     <value>Información</value>
   </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
 </root>

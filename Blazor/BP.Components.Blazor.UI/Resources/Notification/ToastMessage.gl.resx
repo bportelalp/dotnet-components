@@ -129,4 +129,10 @@
   <data name="Warning" xml:space="preserve">
     <value>Aviso</value>
   </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
 </root>
