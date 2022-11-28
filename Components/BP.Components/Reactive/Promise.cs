@@ -13,21 +13,27 @@ namespace BP.Components.Reactive
         private TException _resultException;
         private readonly Action<T> resolve;
         private readonly Action<TException> reject;
+        private PromiseState _state = PromiseState.Pending;
 
 
         public Promise(Action<Action<T>, Action<TException>> callback)
         {
+            _state = PromiseState.Pending;
             _promise = new TaskCompletionSource<T>();
+
             resolve = result =>
             {
                 _result = result;
+                _state = PromiseState.Fullfill;
                 _promise.TrySetResult(_result);
             };
             reject = exception =>
             {
                 _resultException = exception;
+                _state = PromiseState.Reject;
                 _promise.TrySetException(_resultException);
             };
+
             try
             {
                 callback.Invoke(resolve, reject);
@@ -44,22 +50,24 @@ namespace BP.Components.Reactive
             resolve = result =>
             {
                 _result = result;
+                _state = PromiseState.Fullfill;
                 _promise.TrySetResult(_result);
             };
             reject = exception =>
             {
                 _resultException = exception;
+                _state = PromiseState.Reject;
                 _promise.TrySetException(_resultException);
             };
         }
 
-        public Promise<T,TException> Resolve(T result)
+        public Promise<T, TException> Resolve(T result)
         {
             resolve.Invoke(result);
             return this;
         }
 
-        public Promise<T,TException> Reject(TException exception)
+        public Promise<T, TException> Reject(TException exception)
         {
             reject.Invoke(exception);
             return this;
@@ -69,11 +77,20 @@ namespace BP.Components.Reactive
         public Promise<TResult, TResultException> Then<TResult, TResultException>(Action<T, Promise<TResult, TResultException>> callback)
             where TResultException : Exception
         {
-            _promise.Task.Wait();
-            var result = _promise.Task.Result;
-            var promise = new Promise<TResult, TResultException>();
-            callback.Invoke(result, promise);
-            return promise;
+            try
+            {
+                _promise.Task.Wait();
+                var result = _promise.Task.Result;
+                var promise = new Promise<TResult, TResultException>();
+                callback.Invoke(result, promise);
+                return promise;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
         }
 
         public Task<T> Task => _promise.Task;

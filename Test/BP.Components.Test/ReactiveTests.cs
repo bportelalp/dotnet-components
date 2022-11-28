@@ -1,4 +1,5 @@
 using BP.Components.Reactive;
+using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 
 namespace BP.Components.Test
@@ -202,6 +203,28 @@ namespace BP.Components.Test
                 Assert.That(promise2.Task.IsCompleted, Is.True);
                 Assert.That(value, Is.EqualTo(firstOperand + secondOperand));
             });
+        }
+
+        //[Test]
+        public async Task AsynchronousRejectThen()
+        {
+            var promise = new Promise<int>(async (resolve, reject) =>
+            {
+                
+                await Task.Delay(100);
+                reject(new Exception());
+            }).Then<int,Exception>((result,then) =>
+            {
+                then.Resolve(0);
+            });
+
+            //Check first promise is not finished
+            Assert.Multiple(() =>
+            {
+                Assert.That(promise.Task.Status, Is.LessThanOrEqualTo(TaskStatus.Running));
+                Assert.That(promise.Task.IsCompleted, Is.False);
+            });
+
         }
 
 
