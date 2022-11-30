@@ -9,7 +9,8 @@ namespace BP.Components.Blazor.ChartJS.Datasets
 {
     public interface IDataset<T> : IList<T>
     {
-        ChartType Type { get; }
-        string Name { get; set; }
+        public ChartType Type { get; }
+        public string Name { get; set; }
+
     }
 }

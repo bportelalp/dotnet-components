@@ -1,9 +1,3 @@
 ﻿@namespace BP.Components.Blazor.ChartJS
 <canvas id="@Config.CanvasId"/>
 
-@code {
-    [Inject] protected Interop.ChartJSService Service { get; set; }
-
-    [Parameter] public Configuration.ConfigBase Config { get; set; }
-
-}
