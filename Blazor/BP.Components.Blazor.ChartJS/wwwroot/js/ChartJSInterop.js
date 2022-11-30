@@ -1,8 +1,10 @@
 
-export function getTextContent(element) {
-    return element.textContent
+
+let activateChart = (chartId) => {
+    const context = document.getElementById(chartId);
+    
 }
 
-export function setFocusElement(element) {
-    element.focus();
+export {
+    getTextContent,
 }

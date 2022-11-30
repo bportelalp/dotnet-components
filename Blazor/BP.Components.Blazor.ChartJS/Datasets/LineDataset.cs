@@ -1,4 +1,4 @@
-﻿using BP.Components.Blazor.ChartJS.Configuration.Enum;
+﻿using BP.Components.Blazor.ChartJS.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace BP.Components.Blazor.ChartJS.Datasets
 {
     public class LineDataset<T> : Dataset<T>
     {
-        public LineDataset() : base(EChartType.line)
+        public LineDataset() : base(ChartType.line)
         {
         }
 

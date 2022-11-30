@@ -1,5 +1,4 @@
 ﻿using BP.Components.Blazor.ChartJS.Configuration;
-using BP.Components.Blazor.ChartJS.Configuration.Enum;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,11 +12,11 @@ namespace BP.Components.Blazor.ChartJS.Datasets
 {
     public abstract class Dataset<T> : Collection<T>, IDataset<T>
     {
-        public EChartType Type { get;}
-        public string Label { get; set; }
+        public ChartType Type { get;}
+        public string Name { get; set; }
         public IndexableOption<string> BackgroundColor { get; set; } = new();
 
-        public Dataset(EChartType type)
+        public Dataset(ChartType type)
         {
             Type = type;
         }

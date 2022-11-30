@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BP.Components.Blazor.ChartJS.Configuration.Enum;
+using BP.Components.Blazor.ChartJS.Configuration;
 using Newtonsoft.Json;
 
 namespace BP.Components.Blazor.ChartJS.Configuration
@@ -13,7 +13,7 @@ namespace BP.Components.Blazor.ChartJS.Configuration
         [JsonIgnore]
         public string CanvasId { get; } = Guid.NewGuid().ToString();
 
-        public EChartType Type { get; set; }
+        public ChartType Type { get; set; }
 
         public ChartData Data { get; set; }
 

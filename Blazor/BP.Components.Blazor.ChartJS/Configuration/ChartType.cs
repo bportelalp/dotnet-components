@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BP.Components.Blazor.ChartJS.Configuration.Enum
+namespace BP.Components.Blazor.ChartJS.Configuration
 {
-    public enum EChartType
+    public enum ChartType
     {
         bar = 0,
         line = 1,
