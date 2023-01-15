@@ -1,5 +1,9 @@
-﻿namespace BP.Components.RepositoryClient
+﻿using System.Diagnostics;
+using System.Net;
+
+namespace BP.Components.RepositoryClient
 {
+    [DebuggerDisplay("{StatusCode}; {Response}")]
     public class RepoResponse<T>
     {
         public RepoResponse()
@@ -16,6 +20,7 @@
         public bool Success { get; }
         public T Response { get; }
         public HttpResponseMessage HttpResponseMessage { get; }
+        public HttpStatusCode StatusCode => HttpResponseMessage.StatusCode;
 
         /// <summary>
         /// Equivale a <see cref="HttpResponseMessage.Content.ReadAsStringAsync()"/>
