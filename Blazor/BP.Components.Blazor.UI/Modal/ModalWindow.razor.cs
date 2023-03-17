@@ -1,5 +1,6 @@
 ﻿using BP.Components.Blazor.UI.Notification;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace BP.Components.Blazor.UI.Modal
 {
     public partial class ModalWindow
     {
+
         [Inject] IJSRuntime JS { get; set; }
         [Parameter] public RenderFragment ModalHeader { get; set; }
         [Parameter] public RenderFragment ModalBody { get; set; }
